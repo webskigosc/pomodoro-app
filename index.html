@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tydzień 2 - Komponenty</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Kurs React'a | Tydzień 2 - Komponenty</h1>
+      <hr />
+    </header>
+    <div class="App">
+      <div class="TimeboxEditor inactive">
+        <label for="">
+          Co robisz?
+          <input disabled type="text" placeholder="" value="Uczę się" />
+        </label>
+        <label for="">
+          Ile minut?
+          <input disabled type="number" placeholder="" value="25" />
+        </label>
+        <button disabled>Zacznij</button>
+      </div>
+      <div class="Timebox">
+        <h1>Uczę się</h1>
+        <h2 class="Clock">Pozostało: 11:00</h2>
+        <div class="ProgressBar">
+          <div style="width: 30%" class="from-right"></div>
+        </div>
+        <button disabled>Start</button>
+        <button>Stop</button>
+        <button>Pauza</button>
+        <span>Liczba przerw:2 </span>
+      </div>
+    </div>
+  </body>
+</html>
