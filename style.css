@@ -115,7 +115,13 @@ button:disabled {
   background-color: var(--red-200);
   border-radius: 20px;
 }
-
+.SingleProgressBar {
+  height: 36px;
+  background-color: var(--red-200);
+  max-width: 100%;
+  border-radius: 22px;
+  margin-bottom: 15px;
+}
 /** Utilities Class **/
 .from-right {
   float: right;
