@@ -8,34 +8,81 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header>
-      <h1>Kurs React'a | Tydzień 2 - Komponenty</h1>
-      <hr />
-    </header>
-    <div class="App">
-      <div class="TimeboxEditor inactive">
-        <label for="">
-          Co robisz?
-          <input disabled type="text" placeholder="" value="Uczę się" />
-        </label>
-        <label for="">
-          Ile minut?
-          <input disabled type="number" placeholder="" value="25" />
-        </label>
-        <button disabled>Zacznij</button>
-      </div>
-      <div class="Timebox">
-        <h1>Uczę się</h1>
-        <h2 class="Clock">Pozostało: 11:00</h2>
-        <div class="SingleProgressBar" style="width: 38%"></div>
-        <!-- <div class="ProgressBar">
-          <div style="width: 30%" class="from-right"></div>
-        </div> -->
-        <button disabled>Start</button>
-        <button>Stop</button>
-        <button>Pauza</button>
-        <span>Liczba przerw:2 </span>
-      </div>
-    </div>
+    <div id="root"></div>
   </body>
+
+  <script type="text/javascript">
+    const rootElement = document.getElementById('root');
+
+    const headerEl = document.createElement('header');
+    const titleEl = document.createElement('h1');
+    const lineEl = document.createElement('hr');
+    titleEl.textContent = "Kurs React'a | Tydzień 2 - Komponenty";
+    headerEl.append(titleEl, lineEl);
+
+    const appEl = document.createElement('div');
+    appEl.classList = 'App';
+
+    const timeboxEditorEl = document.createElement('div');
+    const timeboxEl = document.createElement('div');
+    timeboxEditorEl.classList = 'TimeboxEditor inactive';
+    timeboxEl.classList = 'Timebox';
+
+    const labelForTextEl = document.createElement('label');
+    labelForTextEl.innerText = 'Co robisz?';
+
+    const labelForTimeEl = document.createElement('label');
+    labelForTimeEl.innerText = 'Ile minut?';
+
+    const inputTextEl = document.createElement('input');
+    inputTextEl.type = 'text';
+    inputTextEl.disabled = true;
+    inputTextEl.value = 'Uczę się';
+
+    const inputTimeEl = document.createElement('input');
+    inputTimeEl.type = 'number';
+    inputTimeEl.disabled = true;
+    inputTimeEl.value = '25';
+
+    labelForTextEl.append(inputTextEl);
+    labelForTimeEl.append(inputTimeEl);
+
+    const btnTaskPomo = document.createElement('button');
+    btnTaskPomo.disabled = true;
+    btnTaskPomo.textContent = 'Zacznij';
+
+    timeboxEditorEl.append(labelForTextEl, labelForTimeEl, btnTaskPomo);
+
+    const taskTitleEl = document.createElement('h1');
+    taskTitleEl.textContent = 'Uczę się';
+    const taskTimeEl = document.createElement('h2');
+    taskTimeEl.classList = 'Clock';
+    taskTimeEl.textContent = 'Pozostało: 12:00';
+    const progressBarEl = document.createElement('div');
+    progressBarEl.classList = 'SingleProgressBar';
+    progressBarEl.style.width = '49%';
+
+    const btnStartPomo = document.createElement('button');
+    btnStartPomo.innerText = 'Start';
+    btnStartPomo.disabled = true;
+    const btnStopPomo = document.createElement('button');
+    btnStopPomo.innerText = 'Stop';
+    const btnPausePomo = document.createElement('button');
+    btnPausePomo.innerText = 'Pauza';
+    const breaksStatus = document.createElement('span');
+    breaksStatus.textContent = 'Liczba przerw:2';
+
+    timeboxEl.append(
+      taskTitleEl,
+      taskTimeEl,
+      progressBarEl,
+      btnStartPomo,
+      btnStopPomo,
+      btnPausePomo,
+      breaksStatus
+    );
+
+    appEl.append(timeboxEditorEl, timeboxEl);
+    rootElement.append(headerEl, appEl);
+  </script>
 </html>
