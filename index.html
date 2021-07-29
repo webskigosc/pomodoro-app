@@ -19,33 +19,65 @@
     ></script>
   </head>
   <body>
-    <header>
-      <h1>Kurs React'a | Tydzień 2 - Komponenty</h1>
-      <hr />
-    </header>
-    <div class="App">
-      <div class="TimeboxEditor inactive">
-        <label for="">
-          Co robisz?
-          <input disabled type="text" placeholder="" value="Uczę się" />
-        </label>
-        <label for="">
-          Ile minut?
-          <input disabled type="number" placeholder="" value="25" />
-        </label>
-        <button disabled>Zacznij</button>
-      </div>
-      <div class="Timebox">
-        <h1>Uczę się</h1>
-        <div id="root"></div>
-        <button disabled>Start</button>
-        <button>Stop</button>
-        <button>Pauza</button>
-        <span>Liczba przerw:2 </span>
-      </div>
-    </div>
+    <div id="root"></div>
 
     <script type="text/babel">
+      function Header({ title }) {
+        return (
+          <header>
+            <h1>{title}</h1>
+            <hr />
+          </header>
+        );
+      }
+
+      function TimeboxEditor() {
+        return (
+          <div className="TimeboxEditor inactive">
+            <label for="">
+              Co robisz?
+              <input
+                disabled={true}
+                type="text"
+                placeholder=""
+                value="Uczę się"
+              />
+            </label>
+            <label for="">
+              Ile minut?
+              <input disabled={true} type="number" placeholder="" value="25" />
+            </label>
+            <button disabled={true}>Zacznij</button>
+          </div>
+        );
+      }
+
+      function Timebox() {
+        return (
+          <div className="Timebox">
+            <h1>Uczę się</h1>
+            <Clock hours={1} minutes={100} seconds={-10} milliseconds={7000} />
+            <ProgressBar percent={87} trackRemaining={true} />
+            <button disabled={true}>Start</button>
+            <button>Stop</button>
+            <button>Pauza</button>
+            <span>Liczba przerw:2 </span>
+          </div>
+        );
+      }
+
+      function App() {
+        return (
+          <>
+            <Header title="Kurs React'a | Tydzień 2 - Komponenty" />
+            <div className="App">
+              <TimeboxEditor />
+              <Timebox />
+            </div>
+          </>
+        );
+      }
+
       function Clock({ hours, minutes, seconds, milliseconds }) {
         const convertNumber = (value, maxValue = 59, maxLength = 2) => {
           if (value < 0) {
@@ -78,13 +110,7 @@
         );
       }
 
-      ReactDOM.render(
-        <>
-          <Clock hours={1} minutes={100} seconds={-10} milliseconds={7000} />
-          <ProgressBar percent={87} trackRemaining={true} />
-        </>,
-        document.getElementById('root')
-      );
+      ReactDOM.render(<App />, document.getElementById('root'));
     </script>
   </body>
 </html>
