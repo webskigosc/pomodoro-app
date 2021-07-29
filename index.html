@@ -52,18 +52,37 @@
         );
       }
 
-      function Timebox() {
-        return (
-          <div className="Timebox">
-            <h1>Uczę się</h1>
-            <Clock hours={1} minutes={100} seconds={-10} milliseconds={7000} />
-            <ProgressBar percent={87} trackRemaining={true} />
-            <button disabled={true}>Start</button>
-            <button>Stop</button>
-            <button>Pauza</button>
-            <span>Liczba przerw:2 </span>
-          </div>
-        );
+      class Timebox extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            isRunning: true,
+            isPaused: false,
+            pausesCount: 0,
+          };
+        }
+
+        render() {
+          const { isRunning, isPaused, pausesCount } = this.state;
+          return (
+            <div className="Timebox">
+              <h1>Uczę się</h1>
+              <Clock
+                hours={1}
+                minutes={100}
+                seconds={-10}
+                milliseconds={7000}
+              />
+              <ProgressBar percent={87} />
+              <button disabled={isRunning}>Start</button>
+              <button disabled={!isRunning}>Stop</button>
+              <button disabled={!isRunning}>
+                {isPaused ? 'Wznów' : 'Pauza'}
+              </button>
+              <span>Liczba przerw: {pausesCount}</span>
+            </div>
+          );
+        }
       }
 
       function App() {
