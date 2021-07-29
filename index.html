@@ -59,6 +59,7 @@
             isRunning: false,
             isPaused: false,
             pausesCount: 0,
+            elapsedTimeInSeconds: 0,
           };
 
           this.handleStop = this.handleStop.bind(this);
@@ -70,6 +71,7 @@
           this.setState({
             isRunning: true,
           });
+          this.startTimer();
         }
 
         handleStop(event) {
@@ -77,12 +79,22 @@
             isRunning: false,
             isPaused: false,
             pausesCount: 0,
+            elapsedTimeInSeconds: 0,
           });
+
+          this.stopTimer();
         }
 
         togglePause() {
           this.setState(function (prevState) {
             const isPaused = !prevState.isPaused;
+
+            if (isPaused) {
+              this.stopTimer();
+            } else {
+              this.startTimer();
+            }
+
             return {
               isPaused,
               pausesCount: isPaused
@@ -92,22 +104,40 @@
           });
         }
 
-        render() {
-          const { isRunning, isPaused, pausesCount } = this.state;
+        startTimer() {
+          this.intervalID = window.setInterval(() => {
+            this.setState((prevState) => ({
+              elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 1,
+            }));
+          }, 1000);
+        }
 
+        stopTimer() {
+          window.clearInterval(this.intervalID);
+        }
+
+        render() {
+          const { isRunning, isPaused, pausesCount, elapsedTimeInSeconds } =
+            this.state;
+          const totalTimeInSeconds = 25 * 60;
+          const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
+          const secondsLeft = Math.floor(timeLeftInSeconds % 60);
+          const minutesLeft = Math.floor(timeLeftInSeconds / 60);
+          const progressInPercent =
+            (elapsedTimeInSeconds / totalTimeInSeconds) * 100.0;
           return (
             <div className="Timebox">
               <h1>Uczę się</h1>
               <Clock
                 className={isPaused ? 'inactive' : ''}
-                hours={1}
-                minutes={100}
-                seconds={-10}
-                milliseconds={7000}
+                // hours={1}
+                minutes={minutesLeft}
+                seconds={secondsLeft}
+                // milliseconds={7000}
               />
               <ProgressBar
                 className={isPaused ? 'inactive' : ''}
-                percent={87}
+                percent={progressInPercent}
               />
               <button onClick={this.handleStart} disabled={isRunning}>
                 Start
@@ -136,7 +166,13 @@
         );
       }
 
-      function Clock({ className, hours, minutes, seconds, milliseconds }) {
+      function Clock({
+        className,
+        hours = 0,
+        minutes = 0,
+        seconds = 0,
+        milliseconds = 0,
+      }) {
         const convertNumber = (value, maxValue = 59, maxLength = 2) => {
           if (value < 0) {
             value = 0;
