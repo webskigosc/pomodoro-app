@@ -38,11 +38,6 @@
       <div class="Timebox">
         <h1>Uczę się</h1>
         <div id="root"></div>
-        <!-- <h2 class="Clock">Pozostało: 11:00</h2> -->
-        <!-- <div class="SingleProgressBar" style="width: 38%"></div> -->
-        <div class="ProgressBar">
-          <div style="width: 99%"></div>
-        </div>
         <button disabled>Start</button>
         <button>Stop</button>
         <button>Pauza</button>
@@ -51,8 +46,6 @@
     </div>
 
     <script type="text/babel">
-      const rootElement = document.getElementById('root');
-
       function Clock({ hours, minutes, seconds, milliseconds }) {
         const convertNumber = (value, maxValue = 59, maxLength = 2) => {
           if (value < 0) {
@@ -72,11 +65,26 @@
         );
       }
 
-      const clock = (
-        <Clock hours={1} minutes={100} seconds={-10} milliseconds={7000} />
-      );
+      function ProgressBar({ percent = 0, trackRemaining = false }) {
+        return (
+          <div className="ProgressBar">
+            <div
+              style={{
+                width: `${percent}%`,
+                float: trackRemaining ? 'right' : 'left',
+              }}
+            ></div>
+          </div>
+        );
+      }
 
-      ReactDOM.render(clock, rootElement);
+      ReactDOM.render(
+        <>
+          <Clock hours={1} minutes={100} seconds={-10} milliseconds={7000} />
+          <ProgressBar percent={87} trackRemaining={true} />
+        </>,
+        document.getElementById('root')
+      );
     </script>
   </body>
 </html>
