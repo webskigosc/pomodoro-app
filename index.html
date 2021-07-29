@@ -9,80 +9,83 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script
+      src="https://unpkg.com/react@17/umd/react.production.min.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
+      crossorigin
+    ></script>
+    <script type="text/javascript">
+      const rootElement = document.getElementById('root');
+
+      const pomodoroApp = React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(
+          'header',
+          null,
+          React.createElement(
+            'h1',
+            null,
+            "Kurs React'a | Tydzień 2 - Komponenty"
+          ),
+          React.createElement('hr')
+        ),
+        React.createElement(
+          'div',
+          { className: 'App' },
+          React.createElement(
+            'div',
+            { className: 'TimeboxEditor inactive' },
+            React.createElement(
+              'label',
+              null,
+              'Co robisz?',
+              React.createElement('input', {
+                type: 'text',
+                defaultValue: 'Uczę się',
+                disabled: true,
+              })
+            ),
+            React.createElement(
+              'label',
+              null,
+              'Ile minut?',
+              React.createElement('input', {
+                type: 'number',
+                defaultValue: '35',
+                disabled: true,
+              })
+            ),
+            React.createElement('button', { disabled: true }, 'Zacznij')
+          ),
+          React.createElement(
+            'div',
+            { className: 'Timebox' },
+            React.createElement('h1', null, 'Uczę się'),
+            React.createElement(
+              'h2',
+              { className: 'Clock' },
+              'Pozostało 14:00'
+            ),
+            React.createElement(
+              'div',
+              { className: 'ProgressBar' },
+              React.createElement('div', { style: { width: '42%' } })
+            ),
+            React.createElement('button', { disabled: true }, 'Start'),
+            React.createElement('button', null, 'Stop'),
+            React.createElement('button', null, 'Pauza'),
+            React.createElement('span', null, 'Liczba przerw: 2')
+          )
+        )
+      );
+
+      ReactDOM.render(pomodoroApp, rootElement);
+    </script>
   </body>
-
-  <script type="text/javascript">
-    const rootElement = document.getElementById('root');
-
-    const headerEl = document.createElement('header');
-    const titleEl = document.createElement('h1');
-    const lineEl = document.createElement('hr');
-    titleEl.textContent = "Kurs React'a | Tydzień 2 - Komponenty";
-    headerEl.append(titleEl, lineEl);
-
-    const appEl = document.createElement('div');
-    appEl.classList = 'App';
-
-    const timeboxEditorEl = document.createElement('div');
-    const timeboxEl = document.createElement('div');
-    timeboxEditorEl.classList = 'TimeboxEditor inactive';
-    timeboxEl.classList = 'Timebox';
-
-    const labelForTextEl = document.createElement('label');
-    labelForTextEl.innerText = 'Co robisz?';
-
-    const labelForTimeEl = document.createElement('label');
-    labelForTimeEl.innerText = 'Ile minut?';
-
-    const inputTextEl = document.createElement('input');
-    inputTextEl.type = 'text';
-    inputTextEl.disabled = true;
-    inputTextEl.value = 'Uczę się';
-
-    const inputTimeEl = document.createElement('input');
-    inputTimeEl.type = 'number';
-    inputTimeEl.disabled = true;
-    inputTimeEl.value = '25';
-
-    labelForTextEl.append(inputTextEl);
-    labelForTimeEl.append(inputTimeEl);
-
-    const btnTaskPomo = document.createElement('button');
-    btnTaskPomo.disabled = true;
-    btnTaskPomo.textContent = 'Zacznij';
-
-    timeboxEditorEl.append(labelForTextEl, labelForTimeEl, btnTaskPomo);
-
-    const taskTitleEl = document.createElement('h1');
-    taskTitleEl.textContent = 'Uczę się';
-    const taskTimeEl = document.createElement('h2');
-    taskTimeEl.classList = 'Clock';
-    taskTimeEl.textContent = 'Pozostało: 12:00';
-    const progressBarEl = document.createElement('div');
-    progressBarEl.classList = 'SingleProgressBar';
-    progressBarEl.style.width = '49%';
-
-    const btnStartPomo = document.createElement('button');
-    btnStartPomo.innerText = 'Start';
-    btnStartPomo.disabled = true;
-    const btnStopPomo = document.createElement('button');
-    btnStopPomo.innerText = 'Stop';
-    const btnPausePomo = document.createElement('button');
-    btnPausePomo.innerText = 'Pauza';
-    const breaksStatus = document.createElement('span');
-    breaksStatus.textContent = 'Liczba przerw:2';
-
-    timeboxEl.append(
-      taskTitleEl,
-      taskTimeEl,
-      progressBarEl,
-      btnStartPomo,
-      btnStopPomo,
-      btnPausePomo,
-      breaksStatus
-    );
-
-    appEl.append(timeboxEditorEl, timeboxEl);
-    rootElement.append(headerEl, appEl);
-  </script>
 </html>
