@@ -56,14 +56,29 @@
         constructor(props) {
           super(props);
           this.state = {
-            isRunning: true,
+            isRunning: false,
             isPaused: false,
             pausesCount: 0,
           };
         }
 
+        handleStart(event) {
+          this.setState({
+            isRunning: true,
+          });
+        }
+
+        handleStop(event) {
+          this.setState({
+            isRunning: false,
+            isPaused: false,
+            pausesCount: 0,
+          });
+        }
+
         render() {
           const { isRunning, isPaused, pausesCount } = this.state;
+
           return (
             <div className="Timebox">
               <h1>Uczę się</h1>
@@ -74,8 +89,18 @@
                 milliseconds={7000}
               />
               <ProgressBar percent={87} />
-              <button disabled={isRunning}>Start</button>
-              <button disabled={!isRunning}>Stop</button>
+              <button
+                onClick={this.handleStart.bind(this)}
+                disabled={isRunning}
+              >
+                Start
+              </button>
+              <button
+                onClick={this.handleStop.bind(this)}
+                disabled={!isRunning}
+              >
+                Stop
+              </button>
               <button disabled={!isRunning}>
                 {isPaused ? 'Wznów' : 'Pauza'}
               </button>
