@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tydzień 2 - Komponenty</title>
     <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="root"></div>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- Load React. -->
     <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
     <script
@@ -19,73 +17,66 @@
       src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
       crossorigin
     ></script>
-    <script type="text/javascript">
+  </head>
+  <body>
+    <header>
+      <h1>Kurs React'a | Tydzień 2 - Komponenty</h1>
+      <hr />
+    </header>
+    <div class="App">
+      <div class="TimeboxEditor inactive">
+        <label for="">
+          Co robisz?
+          <input disabled type="text" placeholder="" value="Uczę się" />
+        </label>
+        <label for="">
+          Ile minut?
+          <input disabled type="number" placeholder="" value="25" />
+        </label>
+        <button disabled>Zacznij</button>
+      </div>
+      <div class="Timebox">
+        <h1>Uczę się</h1>
+        <div id="root"></div>
+        <!-- <h2 class="Clock">Pozostało: 11:00</h2> -->
+        <!-- <div class="SingleProgressBar" style="width: 38%"></div> -->
+        <div class="ProgressBar">
+          <div style="width: 99%"></div>
+        </div>
+        <button disabled>Start</button>
+        <button>Stop</button>
+        <button>Pauza</button>
+        <span>Liczba przerw:2 </span>
+      </div>
+    </div>
+
+    <script type="text/babel">
       const rootElement = document.getElementById('root');
 
-      const pomodoroApp = React.createElement(
-        React.Fragment,
-        null,
-        React.createElement(
-          'header',
-          null,
-          React.createElement(
-            'h1',
-            null,
-            "Kurs React'a | Tydzień 2 - Komponenty"
-          ),
-          React.createElement('hr')
-        ),
-        React.createElement(
-          'div',
-          { className: 'App' },
-          React.createElement(
-            'div',
-            { className: 'TimeboxEditor inactive' },
-            React.createElement(
-              'label',
-              null,
-              'Co robisz?',
-              React.createElement('input', {
-                type: 'text',
-                defaultValue: 'Uczę się',
-                disabled: true,
-              })
-            ),
-            React.createElement(
-              'label',
-              null,
-              'Ile minut?',
-              React.createElement('input', {
-                type: 'number',
-                defaultValue: '35',
-                disabled: true,
-              })
-            ),
-            React.createElement('button', { disabled: true }, 'Zacznij')
-          ),
-          React.createElement(
-            'div',
-            { className: 'Timebox' },
-            React.createElement('h1', null, 'Uczę się'),
-            React.createElement(
-              'h2',
-              { className: 'Clock' },
-              'Pozostało 14:00'
-            ),
-            React.createElement(
-              'div',
-              { className: 'ProgressBar' },
-              React.createElement('div', { style: { width: '42%' } })
-            ),
-            React.createElement('button', { disabled: true }, 'Start'),
-            React.createElement('button', null, 'Stop'),
-            React.createElement('button', null, 'Pauza'),
-            React.createElement('span', null, 'Liczba przerw: 2')
-          )
-        )
+      function Clock({ hours, minutes, seconds, milliseconds }) {
+        const convertNumber = (value, maxValue = 59, maxLength = 2) => {
+          if (value < 0) {
+            value = 0;
+          }
+          if (value > maxValue) {
+            value = maxValue;
+          }
+          return value.toString().padStart(maxLength, '0');
+        };
+
+        return (
+          <h2 className="Clock">
+            Pozostało {convertNumber(hours)}:{convertNumber(minutes)}:
+            {convertNumber(seconds)}.{convertNumber(milliseconds, 999, 3)}
+          </h2>
+        );
+      }
+
+      const clock = (
+        <Clock hours={1} minutes={100} seconds={-10} milliseconds={7000} />
       );
 
-      ReactDOM.render(pomodoroApp, rootElement);
+      ReactDOM.render(clock, rootElement);
     </script>
   </body>
 </html>
