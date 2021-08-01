@@ -139,13 +139,22 @@ h2 {
 }
 
 .progress__bg {
-  color: var(--red-color);
   /* color: rgba(var(--tan-color-rgb), 40%); */
+  color: var(--red-color);
 }
 
 .progress__circle {
   color: var(--green-color);
   transform: rotate(-90deg);
+}
+
+.progress__circle.progress__circle--animate > circle {
+  /* animation-name: progress-circle-stroke; */
+  stroke-dasharray: 126;
+  stroke-dashoffset: 0;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
 }
 
 .progress__state {
@@ -160,8 +169,8 @@ h2 {
   font-size: var(--text-3xl);
 }
 
-.state__breaks {
-  margin-top: 6px;
+.state__counter {
+  margin-top: 4px;
   text-transform: uppercase;
 }
 
@@ -323,5 +332,11 @@ input:not(:disabled):focus {
   }
   label.f-width {
     width: 100%;
+  }
+}
+
+@keyframes progress-circle-stroke {
+  to {
+    stroke-dashoffset: 126;
   }
 }

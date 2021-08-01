@@ -8,27 +8,150 @@ function AppWrapper() {
   );
 }
 
-function App() {
-  return (
-    <main className="App">
-      <TaskTimer />
-      <TaskEditor />
-    </main>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isRunning: false,
+      isPaused: false,
+      countPauses: 0,
+      countBreaks: 0,
+      elapsedTimeInSeconds: 0,
+    };
+
+    this.handleStart = this.handleStart.bind(this);
+    this.handleStop = this.handleStop.bind(this);
+    this.togglePause = this.togglePause.bind(this);
+  }
+
+  handleStart(event) {
+    this.setState({
+      isRunning: true,
+      isPaused: false,
+    });
+
+    this.startTimer();
+  }
+
+  handleStop(event) {
+    this.setState({
+      isRunning: false,
+      isPaused: false,
+      countPauses: 0,
+      elapsedTimeInSeconds: 0,
+    });
+
+    this.stopTimer();
+  }
+
+  togglePause(event) {
+    this.setState((prevState) => {
+      const isPaused = !prevState.isPaused;
+      return {
+        isPaused,
+        countPauses: isPaused
+          ? prevState.countPauses + 1
+          : prevState.countPauses,
+      };
+    });
+
+    this.stopTimer();
+  }
+
+  startTimer() {
+    const dateStartInMilliseconds =
+      this.state.elapsedTimeInSeconds > 0
+        ? Date.now() - this.state.elapsedTimeInSeconds * 1000
+        : Date.now();
+
+    this.intervalID = window.setInterval(() => {
+      const dateNowInMilliseconds = Date.now();
+      this.setState({
+        elapsedTimeInSeconds: Math.floor(
+          (dateNowInMilliseconds - dateStartInMilliseconds) / 1000
+        ),
+      });
+    }, 1000);
+  }
+
+  stopTimer() {
+    window.clearInterval(this.intervalID);
+  }
+
+  render() {
+    const {
+      isRunning,
+      isPaused,
+      countBreaks,
+      countPauses,
+      elapsedTimeInSeconds,
+    } = this.state;
+
+    const totalTimeInSeconds = 25 * 60;
+    const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
+
+    return (
+      <main className="App">
+        <TaskTimer
+          isRunning={isRunning}
+          isPaused={isPaused}
+          countBreaks={countBreaks}
+          countPauses={countPauses}
+          handleStart={this.handleStart}
+          handleStop={this.handleStop}
+          togglePause={this.togglePause}
+          timeLeftInSeconds={timeLeftInSeconds}
+          totalTimeInSeconds={totalTimeInSeconds}
+        />
+        <TaskEditor
+          isRunning={isRunning}
+          isPaused={isPaused}
+          handleStart={this.handleStart}
+        />
+      </main>
+    );
+  }
 }
 
-function TaskTimer() {
+function TaskTimer({
+  isRunning,
+  isPaused,
+  countBreaks,
+  countPauses,
+  handleStart,
+  handleStop,
+  togglePause,
+  timeLeftInSeconds,
+  totalTimeInSeconds,
+}) {
+  const classInactive = !isRunning && !isPaused ? 'inactive' : '';
+
   return (
-    <div className="TaskTimer">
-      <Clock />
-      <Controls />
+    <div className={'TaskTimer ' + classInactive}>
+      <Clock
+        isRunning={isRunning}
+        isPaused={isPaused}
+        countBreaks={countBreaks}
+        countPauses={countPauses}
+        timeLeftInSeconds={timeLeftInSeconds}
+        totalTimeInSeconds={totalTimeInSeconds}
+      />
+      <Controls
+        isRunning={isRunning}
+        isPaused={isPaused}
+        handleStart={handleStart}
+        handleStop={handleStop}
+        togglePause={togglePause}
+      />
     </div>
   );
 }
 
-function TaskEditor() {
+function TaskEditor({ isRunning, isPaused, handleStart }) {
+  const isActive = isRunning || isPaused ? false : true;
+
   return (
-    <div className="TaskEditor inactive">
+    <div className={'TaskEditor ' + (!isActive ? 'inactive' : '')}>
       <label className="f-width">
         Task
         <input
@@ -36,23 +159,25 @@ function TaskEditor() {
           placeholder="Task"
           defaultValue="Learning React"
           max="120"
-          disabled={true}
+          disabled={!isActive}
         />
       </label>
       <label>
         Duration
         <input
           type="number"
-          placeholder="25:00"
+          placeholder="25"
           defaultValue="25"
           min="0"
-          pattern="{2}:{2}"
-          disabled={true}
+          max="59"
+          pattern="{2}"
+          disabled={!isActive}
         />
       </label>
       <button
+        onClick={handleStart}
         className="btn btn--brown btn--rounded btn--square--xl"
-        disabled={true}
+        disabled={!isActive}
       >
         GO
       </button>
@@ -60,34 +185,70 @@ function TaskEditor() {
   );
 }
 
-function Clock() {
+function Clock({
+  isRunning,
+  isPaused,
+  countBreaks,
+  countPauses,
+  timeLeftInSeconds,
+  totalTimeInSeconds,
+}) {
+  const secondsLeft = Math.floor(timeLeftInSeconds % 60);
+  const minutesLeft = Math.floor(timeLeftInSeconds / 60);
+
+  const convertNumber = (value, maxValue = 59, maxLength = 2) => {
+    if (value < 0) {
+      value = 0;
+    }
+    if (value > maxValue) {
+      value = maxValue;
+    }
+    return value.toString().padStart(maxLength, '0');
+  };
+
   return (
     <div className="Clock">
       <h2>Learning React</h2>
       <div className="Clock__progress">
         <svg className="progress__bg" viewBox="0 0 42 42">
-          <circle cx="21" cy="21" r="20" fill="none" stroke-width="2" />
+          <circle cx="21" cy="21" r="20" fill="none" strokeWidth="2" />
         </svg>
-        <svg className="progress__circle" viewBox="0 0 42 42">
+        <svg
+          className="progress__circle progress__circle--animate"
+          viewBox="0 0 42 42"
+        >
           <circle
             cx="21"
             cy="21"
             r="20"
             fill="none"
-            stroke-width="2"
-            style={{ strokeDasharray: '126', strokeDashoffset: '31.5px' }}
+            strokeWidth="2"
+            style={{
+              animationName: isRunning ? 'progress-circle-stroke' : '',
+              animationDuration: totalTimeInSeconds + 's',
+              animationPlayState: isPaused ? 'paused' : 'running',
+            }}
           />
         </svg>
         <div className="progress__state">
-          <span className="state__time">25:00</span>
-          <span className="state__breaks">3 Breaks</span>
+          <span className="state__time">
+            {convertNumber(minutesLeft)}:{convertNumber(secondsLeft)}
+          </span>
+          <span className="state__counter">{countBreaks} / 3 Breaks</span>
+          <span className="state__counter">{countPauses} Pauses</span>
         </div>
       </div>
     </div>
   );
 }
 
-function Controls() {
+function Controls({
+  isRunning,
+  isPaused,
+  handleStart,
+  handleStop,
+  togglePause,
+}) {
   const icons = {
     play: (
       <svg height="100%" width="100%" viewBox="0 0 42 42">
@@ -116,16 +277,31 @@ function Controls() {
 
   return (
     <div className="Controls">
-      <button className="btn btn--green btn--rounded btn--square--xl">
+      <button
+        onClick={handleStart}
+        className="btn btn--green btn--rounded btn--square--xl"
+        disabled={isRunning && !isPaused}
+      >
         {icons.play}
       </button>
-      <button className="btn btn--red btn--rounded btn--square--md">
-        {icons.stop}
-      </button>
-      <button className="btn btn--red btn--rounded btn--square--md">
+      <button
+        onClick={togglePause}
+        className="btn btn--red btn--rounded btn--square--md"
+        disabled={!isRunning || isPaused}
+      >
         {icons.pause}
       </button>
-      <button className="btn btn--tan btn--rounded btn--square--md">
+      <button
+        onClick={handleStop}
+        className="btn btn--red btn--rounded btn--square--md"
+        disabled={!isRunning}
+      >
+        {icons.stop}
+      </button>
+      <button
+        className="btn btn--tan btn--rounded btn--square--md"
+        disabled={isRunning && !isPaused}
+      >
         {icons.settings}
       </button>
     </div>
