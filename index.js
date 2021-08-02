@@ -12,28 +12,26 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: 'Learning React',
+      totalTimeInMinutes: 25,
       isRunning: false,
       isPaused: false,
       countPauses: 0,
       countBreaks: 0,
       elapsedTimeInSeconds: 0,
     };
-
-    this.handleStart = this.handleStart.bind(this);
-    this.handleStop = this.handleStop.bind(this);
-    this.togglePause = this.togglePause.bind(this);
   }
 
-  handleStart(event) {
+  handleStart = () => {
     this.setState({
       isRunning: true,
       isPaused: false,
     });
 
     this.startTimer();
-  }
+  };
 
-  handleStop(event) {
+  handleStop = () => {
     this.setState({
       isRunning: false,
       isPaused: false,
@@ -42,9 +40,9 @@ class App extends React.Component {
     });
 
     this.stopTimer();
-  }
+  };
 
-  togglePause(event) {
+  togglePause = () => {
     this.setState((prevState) => {
       const isPaused = !prevState.isPaused;
       return {
@@ -56,7 +54,7 @@ class App extends React.Component {
     });
 
     this.stopTimer();
-  }
+  };
 
   startTimer() {
     const dateStartInMilliseconds =
@@ -78,8 +76,18 @@ class App extends React.Component {
     window.clearInterval(this.intervalID);
   }
 
+  handleChangeTitle = (event) => {
+    this.setState({ title: event.target.value });
+  };
+
+  handleTotalTimeInMinutes = (event) => {
+    this.setState({ totalTimeInMinutes: event.target.value });
+  };
+
   render() {
     const {
+      title,
+      totalTimeInMinutes,
       isRunning,
       isPaused,
       countBreaks,
@@ -87,12 +95,13 @@ class App extends React.Component {
       elapsedTimeInSeconds,
     } = this.state;
 
-    const totalTimeInSeconds = 25 * 60;
+    const totalTimeInSeconds = totalTimeInMinutes * 60;
     const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
 
     return (
       <main className="App">
         <TaskTimer
+          title={title}
           isRunning={isRunning}
           isPaused={isPaused}
           countBreaks={countBreaks}
@@ -104,9 +113,13 @@ class App extends React.Component {
           totalTimeInSeconds={totalTimeInSeconds}
         />
         <TaskEditor
+          title={title}
+          totalTimeInMinutes={totalTimeInMinutes}
           isRunning={isRunning}
           isPaused={isPaused}
           handleStart={this.handleStart}
+          handleChangeTitle={this.handleChangeTitle}
+          handleTotalTimeInMinutes={this.handleTotalTimeInMinutes}
         />
       </main>
     );
@@ -114,6 +127,7 @@ class App extends React.Component {
 }
 
 function TaskTimer({
+  title,
   isRunning,
   isPaused,
   countBreaks,
@@ -129,6 +143,7 @@ function TaskTimer({
   return (
     <div className={'TaskTimer ' + classInactive}>
       <Clock
+        title={title}
         isRunning={isRunning}
         isPaused={isPaused}
         countBreaks={countBreaks}
@@ -147,7 +162,15 @@ function TaskTimer({
   );
 }
 
-function TaskEditor({ isRunning, isPaused, handleStart }) {
+function TaskEditor({
+  title,
+  totalTimeInMinutes,
+  isRunning,
+  isPaused,
+  handleStart,
+  handleChangeTitle,
+  handleTotalTimeInMinutes,
+}) {
   const isActive = isRunning || isPaused ? false : true;
 
   return (
@@ -156,8 +179,9 @@ function TaskEditor({ isRunning, isPaused, handleStart }) {
         Task
         <input
           type="text"
+          value={title}
+          onChange={handleChangeTitle}
           placeholder="Task"
-          defaultValue="Learning React"
           max="120"
           disabled={!isActive}
         />
@@ -166,8 +190,9 @@ function TaskEditor({ isRunning, isPaused, handleStart }) {
         Duration
         <input
           type="number"
+          value={totalTimeInMinutes}
+          onChange={handleTotalTimeInMinutes}
           placeholder="25"
-          defaultValue="25"
           min="0"
           max="59"
           pattern="{2}"
@@ -186,6 +211,7 @@ function TaskEditor({ isRunning, isPaused, handleStart }) {
 }
 
 function Clock({
+  title,
   isRunning,
   isPaused,
   countBreaks,
@@ -208,7 +234,7 @@ function Clock({
 
   return (
     <div className="Clock">
-      <h2>Learning React</h2>
+      <h2>{title}</h2>
       <div className="Clock__progress">
         <svg className="progress__bg" viewBox="0 0 42 42">
           <circle cx="21" cy="21" r="20" fill="none" strokeWidth="2" />
