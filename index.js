@@ -14,11 +14,12 @@ class App extends React.Component {
     this.state = {
       title: 'Learning React',
       totalTimeInMinutes: 25,
+      elapsedTimeInSeconds: 0,
       isRunning: false,
       isPaused: false,
+      isEditable: true,
       countPauses: 0,
       countBreaks: 0,
-      elapsedTimeInSeconds: 0,
     };
   }
 
@@ -26,6 +27,7 @@ class App extends React.Component {
     this.setState({
       isRunning: true,
       isPaused: false,
+      isEditable: false,
     });
 
     this.startTimer();
@@ -35,6 +37,7 @@ class App extends React.Component {
     this.setState({
       isRunning: false,
       isPaused: false,
+      isEditable: true,
       countPauses: 0,
       elapsedTimeInSeconds: 0,
     });
@@ -76,23 +79,30 @@ class App extends React.Component {
     window.clearInterval(this.intervalID);
   }
 
-  handleChangeTitle = (event) => {
+  handleTitleChange = (event) => {
     this.setState({ title: event.target.value });
   };
 
-  handleTotalTimeInMinutes = (event) => {
+  handleTotalTimeInMinutesChange = (event) => {
     this.setState({ totalTimeInMinutes: event.target.value });
+  };
+
+  handleEdit = () => {
+    this.setState({
+      isEditable: true,
+    });
   };
 
   render() {
     const {
       title,
       totalTimeInMinutes,
+      elapsedTimeInSeconds,
       isRunning,
       isPaused,
+      isEditable,
       countBreaks,
       countPauses,
-      elapsedTimeInSeconds,
     } = this.state;
 
     const totalTimeInSeconds = totalTimeInMinutes * 60;
@@ -102,24 +112,26 @@ class App extends React.Component {
       <main className="App">
         <TaskTimer
           title={title}
+          totalTimeInSeconds={totalTimeInSeconds}
+          timeLeftInSeconds={timeLeftInSeconds}
           isRunning={isRunning}
           isPaused={isPaused}
           countBreaks={countBreaks}
           countPauses={countPauses}
-          handleStart={this.handleStart}
-          handleStop={this.handleStop}
-          togglePause={this.togglePause}
-          timeLeftInSeconds={timeLeftInSeconds}
-          totalTimeInSeconds={totalTimeInSeconds}
+          onStart={this.handleStart}
+          onStop={this.handleStop}
+          onPause={this.togglePause}
+          onEdit={this.handleEdit}
         />
         <TaskEditor
           title={title}
           totalTimeInMinutes={totalTimeInMinutes}
           isRunning={isRunning}
           isPaused={isPaused}
-          handleStart={this.handleStart}
-          handleChangeTitle={this.handleChangeTitle}
-          handleTotalTimeInMinutes={this.handleTotalTimeInMinutes}
+          isEditable={isEditable}
+          onStart={this.handleStart}
+          onTitleChange={this.handleTitleChange}
+          onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
         />
       </main>
     );
@@ -128,15 +140,16 @@ class App extends React.Component {
 
 function TaskTimer({
   title,
+  timeLeftInSeconds,
+  totalTimeInSeconds,
   isRunning,
   isPaused,
   countBreaks,
   countPauses,
-  handleStart,
-  handleStop,
-  togglePause,
-  timeLeftInSeconds,
-  totalTimeInSeconds,
+  onStart,
+  onStop,
+  onPause,
+  onEdit,
 }) {
   const classInactive = !isRunning && !isPaused ? 'inactive' : '';
 
@@ -154,9 +167,10 @@ function TaskTimer({
       <Controls
         isRunning={isRunning}
         isPaused={isPaused}
-        handleStart={handleStart}
-        handleStop={handleStop}
-        togglePause={togglePause}
+        onStart={onStart}
+        onStop={onStop}
+        onPause={onPause}
+        onEdit={onEdit}
       />
     </div>
   );
@@ -165,13 +179,13 @@ function TaskTimer({
 function TaskEditor({
   title,
   totalTimeInMinutes,
-  isRunning,
   isPaused,
-  handleStart,
-  handleChangeTitle,
-  handleTotalTimeInMinutes,
+  onStart,
+  onTitleChange,
+  onTotalTimeInMinutesChange,
+  isEditable,
 }) {
-  const isActive = isRunning || isPaused ? false : true;
+  const isActive = isEditable || (isPaused && isEditable) ? true : false;
 
   return (
     <div className={'TaskEditor ' + (!isActive ? 'inactive' : '')}>
@@ -180,7 +194,7 @@ function TaskEditor({
         <input
           type="text"
           value={title}
-          onChange={handleChangeTitle}
+          onChange={onTitleChange}
           placeholder="Task"
           max="120"
           disabled={!isActive}
@@ -191,7 +205,7 @@ function TaskEditor({
         <input
           type="number"
           value={totalTimeInMinutes}
-          onChange={handleTotalTimeInMinutes}
+          onChange={onTotalTimeInMinutesChange}
           placeholder="25"
           min="0"
           max="59"
@@ -200,7 +214,7 @@ function TaskEditor({
         />
       </label>
       <button
-        onClick={handleStart}
+        onClick={onStart}
         className="btn btn--brown btn--rounded btn--square--xl"
         disabled={!isActive}
       >
@@ -268,13 +282,7 @@ function Clock({
   );
 }
 
-function Controls({
-  isRunning,
-  isPaused,
-  handleStart,
-  handleStop,
-  togglePause,
-}) {
+function Controls({ isRunning, isPaused, onStart, onStop, onPause, onEdit }) {
   const icons = {
     play: (
       <svg height="100%" width="100%" viewBox="0 0 42 42">
@@ -304,27 +312,28 @@ function Controls({
   return (
     <div className="Controls">
       <button
-        onClick={handleStart}
+        onClick={onStart}
         className="btn btn--green btn--rounded btn--square--xl"
         disabled={isRunning && !isPaused}
       >
         {icons.play}
       </button>
       <button
-        onClick={togglePause}
+        onClick={onPause}
         className="btn btn--red btn--rounded btn--square--md"
         disabled={!isRunning || isPaused}
       >
         {icons.pause}
       </button>
       <button
-        onClick={handleStop}
+        onClick={onStop}
         className="btn btn--red btn--rounded btn--square--md"
         disabled={!isRunning}
       >
         {icons.stop}
       </button>
       <button
+        onClick={onEdit}
         className="btn btn--tan btn--rounded btn--square--md"
         disabled={isRunning && !isPaused}
       >
