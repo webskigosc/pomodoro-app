@@ -84,27 +84,47 @@ h2 {
   color: var(--green-color);
 }
 
-.TaskTimer {
+.TaskTimer,
+.TaskEditor,
+.TaskCreator,
+.TaskListElement {
   border-radius: 12px;
-  text-align: center;
   border: 1px solid white;
   background: rgba(255, 255, 255, 40%);
   box-shadow: var(--shadow-sm);
+}
+
+.TaskTimer,
+.TaskEditor,
+.TaskCreator {
+  text-align: center;
   margin-bottom: 32px;
   padding: 24px;
 }
 
-.TaskEditor {
+.TaskEditor,
+.TaskCreator,
+.TaskListElement {
   display: grid;
-  grid-template-columns: auto 120px 64px;
-  text-align: center;
   align-items: center;
-  border-radius: 12px;
-  border: 1px solid white;
-  background: rgba(255, 255, 255, 40%);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 32px;
-  padding: 24px;
+}
+
+.TaskEditor,
+.TaskCreator {
+  grid-template-columns: auto 120px 64px;
+}
+
+.TaskListElement {
+  grid-template-columns: auto 80px 44px 44px;
+  margin-bottom: 12px;
+  padding: 6px 24px;
+  transition: background-color 300ms linear;
+}
+.TaskListElement:hover {
+  background-color: white;
+}
+.TaskListElement span {
+  font-size: var(--text-md);
 }
 
 .Clock {
@@ -291,7 +311,8 @@ input:not(:disabled):focus {
 
 .Header,
 .App,
-.Footer {
+.Footer,
+.TasksList {
   margin: 0 auto;
   padding: 12px 0;
   max-width: 680px;
@@ -318,11 +339,13 @@ input:not(:disabled):focus {
 @media screen and (max-width: 720.99px) {
   .Header,
   .App,
-  .Footer {
+  .Footer,
+  .TasksList {
     padding: 6px 12px;
     max-width: 100%;
   }
-  .TaskEditor {
+  .TaskEditor,
+  .TaskCreator {
     display: flex;
     flex-direction: column;
     grid-template-columns: auto 120px;

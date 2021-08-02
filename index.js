@@ -2,9 +2,109 @@ function AppWrapper() {
   return (
     <>
       <Header title="Pomodoro" description="Your favorite task timer" />
-      <App />
+      {/* <App /> */}
+      <TasksList />
       <Footer />
     </>
+  );
+}
+
+class TasksList extends React.Component {
+  state = {
+    tasks: [
+      { title: 'Learning React', totalTimeInMinutes: 25 },
+      { title: 'Learning GraphQL', totalTimeInMinutes: 35 },
+      { title: 'Chill at a beach party', totalTimeInMinutes: 55 },
+    ],
+  };
+
+  handleCreate = (task) => {
+    task = { title: 'New task dummy', totalTimeInMinutes: 25 };
+
+    this.setState((prevState) => {
+      const newTasks = prevState.tasks.concat(task);
+      return { tasks: newTasks };
+    });
+  };
+
+  handleEdit = (index, task) => {
+    this.setState((prevState) => {
+      const editedTasks = [...prevState.tasks];
+      editedTasks[index] = task;
+      return { tasks: editedTasks };
+    });
+  };
+
+  handleDelete = (indexToDelete) => {
+    this.setState((prevState) => {
+      const updatedTasks = [...prevState.tasks];
+      updatedTasks.splice(indexToDelete, 1);
+      return { tasks: updatedTasks };
+    });
+  };
+
+  render() {
+    return (
+      <main className="TasksList">
+        <TaskCreator onCreate={this.handleCreate} />
+        {this.state.tasks.map((task, index) => (
+          <TaskListElement
+            key={index}
+            title={task.title}
+            totalTimeInMinutes={task.totalTimeInMinutes}
+            onEdit={() =>
+              this.handleEdit(index, {
+                title: 'Edited task dummy',
+                totalTimeInMinutes: 15,
+              })
+            }
+            onDelete={() => this.handleDelete(index)}
+          />
+        ))}
+      </main>
+    );
+  }
+}
+
+function TaskListElement({ title, totalTimeInMinutes, onEdit, onDelete }) {
+  return (
+    <div className="TaskListElement">
+      <span>{title}</span>
+      <span>{totalTimeInMinutes}</span>
+      <button
+        onClick={onEdit}
+        className="btn btn--tan btn--rounded btn--square--sm"
+      >
+        e
+      </button>
+      <button
+        onClick={onDelete}
+        className="btn btn--red btn--rounded btn--square--sm"
+      >
+        x
+      </button>
+    </div>
+  );
+}
+
+function TaskCreator({ onCreate }) {
+  return (
+    <div className="TaskCreator">
+      <label className="f-width">
+        Task
+        <input type="text" placeholder="Task" max="120" />
+      </label>
+      <label>
+        Duration
+        <input type="number" placeholder="25" min="0" max="59" pattern="{2}" />
+      </label>
+      <button
+        onClick={onCreate}
+        className="btn btn--brown btn--rounded btn--square--xl"
+      >
+        +
+      </button>
+    </div>
   );
 }
 
