@@ -23,10 +23,9 @@ class TasksList extends React.Component {
   };
 
   handleCreate = (task) => {
-    task = { id: uuid.v4(), title: 'New task dummy', totalTimeInMinutes: 25 };
-
     this.setState((prevState) => {
       const newTasks = prevState.tasks.concat(task);
+
       return { tasks: newTasks };
     });
   };
@@ -34,7 +33,9 @@ class TasksList extends React.Component {
   handleEdit = (index, task) => {
     this.setState((prevState) => {
       const editedTasks = [...prevState.tasks];
-      editedTasks[index] = task;
+      editedTasks[index].title = task.title;
+      editedTasks[index].totalTimeInMinutes = task.totalTimeInMinutes;
+
       return { tasks: editedTasks };
     });
   };
@@ -43,6 +44,7 @@ class TasksList extends React.Component {
     this.setState((prevState) => {
       const updatedTasks = [...prevState.tasks];
       updatedTasks.splice(indexToDelete, 1);
+
       return { tasks: updatedTasks };
     });
   };
@@ -58,7 +60,6 @@ class TasksList extends React.Component {
             totalTimeInMinutes={task.totalTimeInMinutes}
             onEdit={() =>
               this.handleEdit(index, {
-                id: uuid.v4(),
                 title: 'Edited task dummy',
                 totalTimeInMinutes: 15,
               })
@@ -92,25 +93,72 @@ function TaskListElement({ title, totalTimeInMinutes, onEdit, onDelete }) {
   );
 }
 
-function TaskCreator({ onCreate }) {
-  return (
-    <div className="TaskCreator">
-      <label className="f-width">
-        Task
-        <input type="text" placeholder="Task" max="120" />
-      </label>
-      <label>
-        Duration
-        <input type="number" placeholder="25" min="0" max="59" pattern="{2}" />
-      </label>
-      <button
-        onClick={onCreate}
-        className="btn btn--brown btn--rounded btn--square--xl"
-      >
-        <SVG icon="add" />
-      </button>
-    </div>
-  );
+class TaskCreator extends React.Component {
+  state = {
+    id: uuid.v4(),
+    title: 'Focus on... any task You want!',
+    totalTimeInMinutes: 25,
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    this.props.onCreate({
+      id: uuid.v4(),
+      title: this.state.title,
+      totalTimeInMinutes: this.state.totalTimeInMinutes,
+    });
+
+    this.setState({ title: '', totalTimeInMinutes: '' });
+  };
+
+  handleTitleInput = (event) => {
+    this.setState({
+      title: event.target.value,
+    });
+  };
+
+  handleTotalTimeInMinutesInput = (event) => {
+    this.setState({
+      totalTimeInMinutes: event.target.value,
+    });
+  };
+
+  render() {
+    return (
+      <div className="TaskCreator">
+        <form onSubmit={this.handleSubmit}>
+          <label className="f-width">
+            Task
+            <input
+              value={this.state.title}
+              onChange={this.handleTitleInput}
+              type="text"
+              placeholder="Task"
+              max="120"
+              required={true}
+            />
+          </label>
+          <label>
+            Duration
+            <input
+              value={this.state.totalTimeInMinutes}
+              onChange={this.handleTotalTimeInMinutesInput}
+              type="number"
+              placeholder="25"
+              min="1"
+              max="59"
+              pattern="{2}"
+              required={true}
+            />
+          </label>
+          <button className="btn btn--brown btn--rounded btn--square--xl">
+            <SVG icon="add" />
+          </button>
+        </form>
+      </div>
+    );
+  }
 }
 
 class App extends React.Component {
