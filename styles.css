@@ -208,13 +208,14 @@ label {
 
 input {
   border: none;
-  background: transparent;
+  background-color: transparent;
   border-bottom: 1px solid var(--tan-color);
   padding: 6px 12px;
   font-size: 22px;
   font-weight: 300;
   margin-top: 6px;
   color: var(--brown-color);
+  transition: background-color 300ms linear;
 }
 
 label:not(:last-child) {
@@ -227,9 +228,13 @@ input[type='number'] {
 
 input:not(:disabled):hover,
 input:not(:disabled):focus {
-  background: white;
+  background-color: white;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+}
+
+input::placeholder {
+  color: var(--tan-color);
 }
 
 *:focus {

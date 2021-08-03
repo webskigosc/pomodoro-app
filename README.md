@@ -21,3 +21,4 @@ Pomodoro timer with task information. Simple app for learning React from course.
 [Week 2 Lesson 8 - homework 1-4](https://codepen.io/martincodes-pl/pen/zYwWJBw) <br/>
 [Week 2 Lesson 9 - homework](https://codepen.io/martincodes-pl/pen/NWjYeeN) <br/>
 [Week 2 Lesson 16 - homework](https://codepen.io/martincodes-pl/pen/jOmKYxN) <br/>
+[Week 3 Lesson 8 - homework](https://codepen.io/martincodes-pl/pen/BaRPVyE) <br/>
