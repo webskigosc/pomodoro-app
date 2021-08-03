@@ -12,14 +12,18 @@ function AppWrapper() {
 class TasksList extends React.Component {
   state = {
     tasks: [
-      { title: 'Learning React', totalTimeInMinutes: 25 },
-      { title: 'Learning GraphQL', totalTimeInMinutes: 35 },
-      { title: 'Chill at a beach party', totalTimeInMinutes: 55 },
+      { id: uuid.v4(), title: 'Learning React', totalTimeInMinutes: 25 },
+      { id: uuid.v4(), title: 'Learning GraphQL', totalTimeInMinutes: 35 },
+      {
+        id: uuid.v4(),
+        title: 'Chill at a beach party',
+        totalTimeInMinutes: 55,
+      },
     ],
   };
 
   handleCreate = (task) => {
-    task = { title: 'New task dummy', totalTimeInMinutes: 25 };
+    task = { id: uuid.v4(), title: 'New task dummy', totalTimeInMinutes: 25 };
 
     this.setState((prevState) => {
       const newTasks = prevState.tasks.concat(task);
@@ -49,11 +53,12 @@ class TasksList extends React.Component {
         <TaskCreator onCreate={this.handleCreate} />
         {this.state.tasks.map((task, index) => (
           <TaskListElement
-            key={index}
+            key={task.id}
             title={task.title}
             totalTimeInMinutes={task.totalTimeInMinutes}
             onEdit={() =>
               this.handleEdit(index, {
+                id: uuid.v4(),
                 title: 'Edited task dummy',
                 totalTimeInMinutes: 15,
               })
