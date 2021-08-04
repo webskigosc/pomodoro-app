@@ -94,34 +94,24 @@ function TaskListElement({ title, totalTimeInMinutes, onEdit, onDelete }) {
 }
 
 class TaskCreator extends React.Component {
-  state = {
-    id: uuid.v4(),
-    title: 'Focus on... any task You want!',
-    totalTimeInMinutes: 25,
-  };
+  constructor(props) {
+    super(props);
+
+    this.refTitleInput = React.createRef();
+    this.refTotalTimeInMinutesInput = React.createRef();
+  }
 
   handleSubmit = (event) => {
     event.preventDefault();
 
     this.props.onCreate({
       id: uuid.v4(),
-      title: this.state.title,
-      totalTimeInMinutes: this.state.totalTimeInMinutes,
+      title: this.refTitleInput.current.value,
+      totalTimeInMinutes: this.refTotalTimeInMinutesInput.current.value,
     });
 
-    this.setState({ title: '', totalTimeInMinutes: '' });
-  };
-
-  handleTitleInput = (event) => {
-    this.setState({
-      title: event.target.value,
-    });
-  };
-
-  handleTotalTimeInMinutesInput = (event) => {
-    this.setState({
-      totalTimeInMinutes: event.target.value,
-    });
+    this.refTitleInput.current.value = '';
+    this.refTotalTimeInMinutesInput.current.value = '';
   };
 
   render() {
@@ -131,8 +121,8 @@ class TaskCreator extends React.Component {
           <label className="f-width">
             Task
             <input
-              value={this.state.title}
-              onChange={this.handleTitleInput}
+              ref={this.refTitleInput}
+              defaultValue="Focus on... any task You want!"
               type="text"
               placeholder="Task"
               max="120"
@@ -142,8 +132,8 @@ class TaskCreator extends React.Component {
           <label>
             Duration
             <input
-              value={this.state.totalTimeInMinutes}
-              onChange={this.handleTotalTimeInMinutesInput}
+              ref={this.refTotalTimeInMinutesInput}
+              defaultValue={25}
               type="number"
               placeholder="25"
               min="1"
