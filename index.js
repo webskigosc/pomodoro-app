@@ -97,8 +97,7 @@ class TaskCreator extends React.Component {
   constructor(props) {
     super(props);
 
-    this.refTitleInput = React.createRef();
-    this.refTotalTimeInMinutesInput = React.createRef();
+    this.refForm = React.createRef();
   }
 
   handleSubmit = (event) => {
@@ -106,22 +105,22 @@ class TaskCreator extends React.Component {
 
     this.props.onCreate({
       id: uuid.v4(),
-      title: this.refTitleInput.current.value,
-      totalTimeInMinutes: this.refTotalTimeInMinutesInput.current.value,
+      title: this.refForm.current.elements['title'].value,
+      totalTimeInMinutes: this.refForm.current.elements['time'].value,
     });
 
-    this.refTitleInput.current.value = '';
-    this.refTotalTimeInMinutesInput.current.value = '';
+    this.refForm.current.elements['title'].value = '';
+    this.refForm.current.elements['title'].value = '';
   };
 
   render() {
     return (
       <div className="TaskCreator">
-        <form onSubmit={this.handleSubmit}>
+        <form ref={this.refForm} onSubmit={this.handleSubmit}>
           <label className="f-width">
             Task
             <input
-              ref={this.refTitleInput}
+              name="title"
               defaultValue="Focus on... any task You want!"
               type="text"
               placeholder="Task"
@@ -132,7 +131,7 @@ class TaskCreator extends React.Component {
           <label>
             Duration
             <input
-              ref={this.refTotalTimeInMinutesInput}
+              name="time"
               defaultValue={25}
               type="number"
               placeholder="25"
