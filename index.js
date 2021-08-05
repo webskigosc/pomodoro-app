@@ -11,60 +11,79 @@ function AppWrapper() {
 
 class TasksList extends React.Component {
   state = {
+    edit: false,
+    editedTask: null,
     tasks: [
-      { id: uuid.v4(), title: 'Learning React', totalTimeInMinutes: 25 },
-      { id: uuid.v4(), title: 'Learning GraphQL', totalTimeInMinutes: 35 },
+      { id: uuid.v4(), title: 'Learning React', totalTimeInMinutes: '25' },
+      { id: uuid.v4(), title: 'Learning GraphQL', totalTimeInMinutes: '35' },
       {
         id: uuid.v4(),
         title: 'Chill at a beach party',
-        totalTimeInMinutes: 55,
+        totalTimeInMinutes: '55',
       },
     ],
   };
 
   handleCreate = (task) => {
     this.setState((prevState) => {
-      const newTasks = prevState.tasks.concat(task);
-
-      return { tasks: newTasks };
+      const newTasksArray = [task, ...prevState.tasks];
+      return { tasks: newTasksArray };
     });
   };
 
-  handleEdit = (index, task) => {
+  handleDelete = (taskID) => {
     this.setState((prevState) => {
-      const editedTasks = [...prevState.tasks];
-      editedTasks[index].title = task.title;
-      editedTasks[index].totalTimeInMinutes = task.totalTimeInMinutes;
-
-      return { tasks: editedTasks };
+      const updatedTasksArray = [...prevState.tasks].filter(
+        (task) => task.id !== taskID
+      );
+      return { tasks: updatedTasksArray };
     });
   };
 
-  handleDelete = (indexToDelete) => {
-    this.setState((prevState) => {
-      const updatedTasks = [...prevState.tasks];
-      updatedTasks.splice(indexToDelete, 1);
+  handleEdit = (taskID) => {
+    this.setState({
+      edit: true,
+      editedTask: Object.assign(
+        {},
+        ...this.state.tasks.filter((task) => task.id === taskID)
+      ),
+    });
+  };
 
-      return { tasks: updatedTasks };
+  handleEditing = (editedTask) => {
+    this.setState((prevState) => {
+      const editedTaskIndex = [...prevState.tasks].findIndex(
+        (task) => task.id === editedTask.id
+      );
+      const updatedTasksArray = [...prevState.tasks];
+      updatedTasksArray[editedTaskIndex] = editedTask;
+
+      return {
+        edit: false,
+        editedTask: null,
+        tasks: updatedTasksArray,
+      };
     });
   };
 
   render() {
+    const { edit, editedTask } = this.state;
     return (
       <main className="TasksList">
-        <TaskCreator onCreate={this.handleCreate} />
-        {this.state.tasks.map((task, index) => (
+        <TaskCreator
+          onCreate={this.handleCreate}
+          isEdit={edit}
+          editedTask={editedTask}
+          onEditing={this.handleEditing}
+        />
+        {this.state.tasks.map((task) => (
           <TaskListElement
             key={task.id}
             title={task.title}
             totalTimeInMinutes={task.totalTimeInMinutes}
-            onEdit={() =>
-              this.handleEdit(index, {
-                title: 'Edited task dummy',
-                totalTimeInMinutes: 15,
-              })
-            }
-            onDelete={() => this.handleDelete(index)}
+            isEdit={edit}
+            onEdit={() => this.handleEdit(task.id)}
+            onDelete={() => this.handleDelete(task.id)}
           />
         ))}
       </main>
@@ -72,19 +91,27 @@ class TasksList extends React.Component {
   }
 }
 
-function TaskListElement({ title, totalTimeInMinutes, onEdit, onDelete }) {
+function TaskListElement({
+  title,
+  totalTimeInMinutes,
+  isEdit,
+  onEdit,
+  onDelete,
+}) {
   return (
     <div className="TaskListElement">
       <span>{title}</span>
       <span>{totalTimeInMinutes}</span>
       <button
         onClick={onEdit}
+        disabled={isEdit}
         className="btn btn--tan btn--rounded btn--square--sm"
       >
         <SVG icon="edit" />
       </button>
       <button
         onClick={onDelete}
+        disabled={isEdit}
         className="btn btn--red btn--rounded btn--square--sm"
       >
         <SVG icon="delete" />
@@ -97,33 +124,48 @@ class TaskCreator extends React.Component {
   constructor(props) {
     super(props);
 
-    this.refForm = React.createRef();
+    this.refTitleInput = React.createRef();
+    this.refTotalTimeInMinutesInput = React.createRef();
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
+  handleSubmit = (e) => {
+    e.preventDefault();
 
-    this.props.onCreate({
-      id: uuid.v4(),
-      title: this.refForm.current.elements['title'].value,
-      totalTimeInMinutes: this.refForm.current.elements['time'].value,
-    });
+    const task = {
+      id: this.props.isEdit ? this.props.editedTask.id : uuid.v4(),
+      title: this.refTitleInput.current.value,
+      totalTimeInMinutes: this.refTotalTimeInMinutesInput.current.value,
+    };
 
-    this.refForm.current.elements['title'].value = '';
-    this.refForm.current.elements['title'].value = '';
+    if (!this.props.isEdit) {
+      this.props.onCreate(task);
+    } else {
+      this.props.onEditing(task);
+    }
+
+    this.refTitleInput.current.value = '';
+    this.refTotalTimeInMinutesInput.current.value = '';
   };
 
   render() {
+    const { isEdit, editedTask } = this.props;
+
+    if (isEdit) {
+      this.refTitleInput.current.value = editedTask.title;
+      this.refTotalTimeInMinutesInput.current.value =
+        editedTask.totalTimeInMinutes;
+    }
+
     return (
       <div className="TaskCreator">
-        <form ref={this.refForm} onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           <label className="f-width">
             Task
             <input
+              ref={this.refTitleInput}
               name="title"
-              defaultValue="Focus on... any task You want!"
               type="text"
-              placeholder="Task"
+              placeholder="Focus on... any task You want!"
               max="120"
               required={true}
             />
@@ -131,8 +173,8 @@ class TaskCreator extends React.Component {
           <label>
             Duration
             <input
+              ref={this.refTotalTimeInMinutesInput}
               name="time"
-              defaultValue={25}
               type="number"
               placeholder="25"
               min="1"
@@ -141,8 +183,8 @@ class TaskCreator extends React.Component {
               required={true}
             />
           </label>
-          <button className="btn btn--brown btn--rounded btn--square--xl">
-            <SVG icon="add" />
+          <button className="btn btn--green btn--rounded btn--square--xl">
+            <SVG icon={isEdit ? 'check' : 'add'} />
           </button>
         </form>
       </div>
@@ -482,7 +524,11 @@ function Footer() {
         {' '}
         GitHub
       </a>{' '}
-      - Learning by doing | MartinCodes
+      - Learning by doing | W03L11
+      <a className="Footer__link" href="https://kursreacta.pl/">
+        {' '}
+        Kurs Reacta
+      </a>
     </footer>
   );
 }
@@ -552,6 +598,11 @@ function SVG({ icon = 'play' }) {
     delete: (
       <svg width="100%" height="100%" viewBox="0 0 42 42">
         <path d="M41.483,1.885l-1.886,-1.885l-18.856,18.856l-18.856,-18.856l-1.885,1.885l18.856,18.856l-18.856,18.856l1.885,1.886l18.856,-18.856l18.856,18.856l1.886,-1.886l-18.856,-18.856l18.856,-18.856Z" />
+      </svg>
+    ),
+    check: (
+      <svg width="100%" height="100%" viewBox="0 0 42 42">
+        <path d="M40.336,9.801l-23.608,23.608l-15.038,-15.038l-1.414,1.414l16.452,16.452l25.022,-25.022l-1.414,-1.414Z" />
       </svg>
     ),
   };
