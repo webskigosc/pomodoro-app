@@ -12,23 +12,47 @@ function AppWrapper() {
 class TasksList extends React.Component {
   state = {
     edit: false,
-    editedTask: null,
+    taskTemp: {
+      id: '',
+      title: 'Focus on... any task You want!',
+      totalTimeInMinutes: '25',
+    },
     tasks: [
       { id: uuid.v4(), title: 'Learning React', totalTimeInMinutes: '25' },
       { id: uuid.v4(), title: 'Learning GraphQL', totalTimeInMinutes: '35' },
-      {
-        id: uuid.v4(),
-        title: 'Chill at a beach party',
-        totalTimeInMinutes: '55',
-      },
+      { id: uuid.v4(), title: 'Just chill :)', totalTimeInMinutes: '55' },
     ],
   };
 
-  handleCreate = (task) => {
+  handleAdd = () => {
     this.setState((prevState) => {
-      const newTasksArray = [task, ...prevState.tasks];
-      return { tasks: newTasksArray };
+      const newTaskTemp = { ...prevState.taskTemp };
+      newTaskTemp.id = uuid.v4();
+      return {
+        taskTemp: { id: '', title: '', totalTimeInMinutes: '' },
+        tasks: [newTaskTemp, ...prevState.tasks],
+      };
     });
+  };
+
+  handleEdit = (taskID) => {
+    this.setState({
+      edit: true,
+      taskTemp: Object.assign(
+        {},
+        ...this.state.tasks.filter((task) => task.id === taskID)
+      ),
+    });
+  };
+
+  handleUpdate = () => {
+    this.setState((prevState) => ({
+      edit: false,
+      taskTemp: { id: '', title: '', totalTimeInMinutes: '' },
+      tasks: [...this.state.tasks].map((task) =>
+        task.id === prevState.taskTemp.id ? (task = prevState.taskTemp) : task
+      ),
+    }));
   };
 
   handleDelete = (taskID) => {
@@ -40,43 +64,37 @@ class TasksList extends React.Component {
     });
   };
 
-  handleEdit = (taskID) => {
-    this.setState({
-      edit: true,
-      editedTask: Object.assign(
-        {},
-        ...this.state.tasks.filter((task) => task.id === taskID)
-      ),
+  handleTitleChange = (e) => {
+    this.setState((prevState) => {
+      const updatedTaskTemp = prevState.taskTemp;
+      updatedTaskTemp.title = e.target.value;
+      return { taskTemp: updatedTaskTemp };
     });
   };
 
-  handleEditing = (editedTask) => {
+  handleTotalTimeInMinutesChange = (e) => {
     this.setState((prevState) => {
-      const editedTaskIndex = [...prevState.tasks].findIndex(
-        (task) => task.id === editedTask.id
-      );
-      const updatedTasksArray = [...prevState.tasks];
-      updatedTasksArray[editedTaskIndex] = editedTask;
-
-      return {
-        edit: false,
-        editedTask: null,
-        tasks: updatedTasksArray,
-      };
+      const updatedTaskTemp = prevState.taskTemp;
+      updatedTaskTemp.totalTimeInMinutes = e.target.value;
+      return { taskTemp: updatedTaskTemp };
     });
   };
 
   render() {
-    const { edit, editedTask } = this.state;
+    const { edit, taskTemp, tasks } = this.state;
+
     return (
       <main className="TasksList">
         <TaskCreator
-          onCreate={this.handleCreate}
           isEdit={edit}
-          editedTask={editedTask}
-          onEditing={this.handleEditing}
+          titleTemp={taskTemp.title}
+          totalTimeInMinutesTemp={taskTemp.totalTimeInMinutes}
+          onAdd={this.handleAdd}
+          onUpdate={this.handleUpdate}
+          onTitleChange={this.handleTitleChange}
+          onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
         />
-        {this.state.tasks.map((task) => (
+        {tasks.map((task) => (
           <TaskListElement
             key={task.id}
             title={task.title}
@@ -121,40 +139,24 @@ function TaskListElement({
 }
 
 class TaskCreator extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.refTitleInput = React.createRef();
-    this.refTotalTimeInMinutesInput = React.createRef();
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
 
-    const task = {
-      id: this.props.isEdit ? this.props.editedTask.id : uuid.v4(),
-      title: this.refTitleInput.current.value,
-      totalTimeInMinutes: this.refTotalTimeInMinutesInput.current.value,
-    };
-
-    if (!this.props.isEdit) {
-      this.props.onCreate(task);
+    if (this.props.isEdit) {
+      this.props.onUpdate();
     } else {
-      this.props.onEditing(task);
+      this.props.onAdd();
     }
-
-    this.refTitleInput.current.value = '';
-    this.refTotalTimeInMinutesInput.current.value = '';
   };
 
   render() {
-    const { isEdit, editedTask } = this.props;
-
-    if (isEdit) {
-      this.refTitleInput.current.value = editedTask.title;
-      this.refTotalTimeInMinutesInput.current.value =
-        editedTask.totalTimeInMinutes;
-    }
+    const {
+      isEdit,
+      onTitleChange,
+      onTotalTimeInMinutesChange,
+      titleTemp,
+      totalTimeInMinutesTemp,
+    } = this.props;
 
     return (
       <div className="TaskCreator">
@@ -162,7 +164,8 @@ class TaskCreator extends React.Component {
           <label className="f-width">
             Task
             <input
-              ref={this.refTitleInput}
+              value={titleTemp}
+              onChange={onTitleChange}
               name="title"
               type="text"
               placeholder="Focus on... any task You want!"
@@ -173,7 +176,8 @@ class TaskCreator extends React.Component {
           <label>
             Duration
             <input
-              ref={this.refTotalTimeInMinutesInput}
+              value={totalTimeInMinutesTemp}
+              onChange={onTotalTimeInMinutesChange}
               name="time"
               type="number"
               placeholder="25"
