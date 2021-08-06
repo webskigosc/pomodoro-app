@@ -104,25 +104,55 @@ h2 {
 
 .TaskEditor,
 .TaskCreator form,
-.TaskListElement {
+.TaskListElement,
+.TaskListElement form {
   display: grid;
   align-items: center;
 }
 
 .TaskEditor,
 .TaskCreator form {
-  grid-template-columns: auto 120px 64px;
+  grid-template-columns: auto 100px 70px;
+}
+
+.TaskCreator h2 {
+  color: var(--tan-color);
+  text-align: center;
+  margin-bottom: 12px;
 }
 
 .TaskListElement {
-  grid-template-columns: auto 80px 44px 44px;
+  grid-template-columns: auto 44px 44px;
   margin-bottom: 12px;
   padding: 6px 24px;
   transition: background-color 300ms linear;
 }
-.TaskListElement:hover {
+
+.TaskListElement form {
+  grid-template-columns: auto 100px;
+}
+
+.TaskListElement.editable {
+  grid-template-columns: auto 44px;
+}
+.TaskListElement.editable form {
+  grid-template-columns: auto 100px 44px;
+}
+
+.TaskListElement form input {
+  border-bottom-color: transparent;
+  margin-right: 24px;
+}
+
+.TaskListElement.editable form input {
+  border-bottom-color: var(--green-color);
+}
+
+.TaskListElement:hover,
+.TaskListElement.editable {
   background-color: white;
 }
+
 .TaskListElement span {
   font-size: var(--text-md);
 }

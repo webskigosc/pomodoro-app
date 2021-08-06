@@ -100,8 +100,12 @@ class TasksList extends React.Component {
             title={task.title}
             totalTimeInMinutes={task.totalTimeInMinutes}
             isEdit={edit}
+            taskTemp={task.id === taskTemp.id ? taskTemp : false}
             onEdit={() => this.handleEdit(task.id)}
             onDelete={() => this.handleDelete(task.id)}
+            onUpdate={this.handleUpdate}
+            onTitleChange={this.handleTitleChange}
+            onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
           />
         ))}
       </main>
@@ -113,20 +117,62 @@ function TaskListElement({
   title,
   totalTimeInMinutes,
   isEdit,
+  taskTemp,
   onEdit,
   onDelete,
+  onUpdate,
+  onTitleChange,
+  onTotalTimeInMinutesChange,
 }) {
+  const isEditable = isEdit && taskTemp;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onUpdate();
+  };
+
   return (
-    <div className="TaskListElement">
-      <span>{title}</span>
-      <span>{totalTimeInMinutes}</span>
-      <button
-        onClick={onEdit}
-        disabled={isEdit}
-        className="btn btn--tan btn--rounded btn--square--sm"
-      >
-        <SVG icon="edit" />
-      </button>
+    <div className={'TaskListElement ' + (isEditable ? 'editable' : '')}>
+      <form onSubmit={handleSubmit}>
+        <input
+          value={isEditable ? taskTemp.title : title}
+          onChange={onTitleChange}
+          type="text"
+          minlength="3"
+          maxlength="120"
+          required={true}
+          disabled={!isEdit}
+        />
+
+        <input
+          value={isEditable ? taskTemp.totalTimeInMinutes : totalTimeInMinutes}
+          onChange={onTotalTimeInMinutesChange}
+          type="number"
+          min="1"
+          max="59"
+          pattern="[0-9]{2}"
+          required={true}
+          disabled={!isEdit}
+        />
+
+        {isEditable && (
+          <button
+            type="submit"
+            className="btn btn--rounded btn--square--sm btn--green"
+          >
+            <SVG icon="check" />
+          </button>
+        )}
+      </form>
+      {!isEditable && (
+        <button
+          onClick={onEdit}
+          className="btn btn--rounded btn--square--sm btn--tan"
+        >
+          <SVG icon="edit" />
+        </button>
+      )}
+
       <button
         onClick={onDelete}
         disabled={isEdit}
@@ -160,6 +206,7 @@ class TaskCreator extends React.Component {
 
     return (
       <div className="TaskCreator">
+        <h2>{isEdit ? 'Edit Your task' : 'Add new task'}</h2>
         <form onSubmit={this.handleSubmit}>
           <label className="f-width">
             Task
@@ -168,8 +215,9 @@ class TaskCreator extends React.Component {
               onChange={onTitleChange}
               name="title"
               type="text"
+              minlength="3"
+              maxlength="120"
               placeholder="Focus on... any task You want!"
-              max="120"
               required={true}
             />
           </label>
@@ -183,7 +231,7 @@ class TaskCreator extends React.Component {
               placeholder="25"
               min="1"
               max="59"
-              pattern="{2}"
+              pattern="[0-9]{2}"
               required={true}
             />
           </label>
@@ -384,7 +432,8 @@ function TaskEditor({
           value={title}
           onChange={onTitleChange}
           placeholder="Task"
-          max="120"
+          minlength="3"
+          maxlength="120"
           disabled={!isActive}
         />
       </label>
@@ -395,9 +444,9 @@ function TaskEditor({
           value={totalTimeInMinutes}
           onChange={onTotalTimeInMinutesChange}
           placeholder="25"
-          min="0"
+          min="1"
           max="59"
-          pattern="{2}"
+          pattern="[0-9]{2}"
           disabled={!isActive}
         />
       </label>
