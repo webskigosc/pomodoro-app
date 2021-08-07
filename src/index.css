@@ -345,7 +345,7 @@ input::placeholder {
 }
 
 .Header,
-.App,
+.Timer,
 .Footer,
 .TasksList {
   margin: 0 auto;
@@ -373,7 +373,7 @@ input::placeholder {
 
 @media screen and (max-width: 720.99px) {
   .Header,
-  .App,
+  .Timer,
   .Footer,
   .TasksList {
     padding: 6px 12px;

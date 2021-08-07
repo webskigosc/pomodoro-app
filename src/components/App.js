@@ -1,13 +1,18 @@
-function AppWrapper() {
+import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
+function App() {
   return (
-    <>
+    <div className="App">
       <Header title="Pomodoro" description="Your favorite task timer" />
+      <Timer />
       <TasksList />
-      {/* <App /> */}
       <Footer />
-    </>
+    </div>
   );
 }
+
+export default App;
 
 class TasksList extends React.Component {
   state = {
@@ -18,16 +23,16 @@ class TasksList extends React.Component {
       totalTimeInMinutes: '25',
     },
     tasks: [
-      { id: uuid.v4(), title: 'Learning React', totalTimeInMinutes: '25' },
-      { id: uuid.v4(), title: 'Learning GraphQL', totalTimeInMinutes: '35' },
-      { id: uuid.v4(), title: 'Just chill :)', totalTimeInMinutes: '55' },
+      { id: uuidv4(), title: 'Learning React', totalTimeInMinutes: '25' },
+      { id: uuidv4(), title: 'Learning GraphQL', totalTimeInMinutes: '35' },
+      { id: uuidv4(), title: 'Just chill :)', totalTimeInMinutes: '55' },
     ],
   };
 
   handleAdd = () => {
     this.setState((prevState) => {
       const newTaskTemp = { ...prevState.taskTemp };
-      newTaskTemp.id = uuid.v4();
+      newTaskTemp.id = uuidv4();
       return {
         taskTemp: { id: '', title: '', totalTimeInMinutes: '' },
         tasks: [newTaskTemp, ...prevState.tasks],
@@ -244,7 +249,7 @@ class TaskCreator extends React.Component {
   }
 }
 
-class App extends React.Component {
+class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -345,7 +350,7 @@ class App extends React.Component {
     const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
 
     return (
-      <main className="App">
+      <main className="Timer">
         <TaskTimer
           title={title}
           totalTimeInSeconds={totalTimeInSeconds}
@@ -662,5 +667,3 @@ function SVG({ icon = 'play' }) {
 
   return <>{iconsArr[icon]}</>;
 }
-
-ReactDOM.render(<AppWrapper />, document.getElementById('root'));
