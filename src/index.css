@@ -53,6 +53,7 @@ body {
 
 main {
   flex-grow: 1;
+  margin: 0 auto;
 }
 
 h1,
@@ -84,7 +85,7 @@ h2 {
   color: var(--green-color);
 }
 
-.TaskTimer,
+.Timer,
 .TaskEditor,
 .TaskCreator form,
 .TaskListElement {
@@ -94,7 +95,7 @@ h2 {
   box-shadow: var(--shadow-sm);
 }
 
-.TaskTimer,
+.Timer,
 .TaskEditor,
 .TaskCreator form {
   text-align: center;
@@ -345,9 +346,8 @@ input::placeholder {
 }
 
 .Header,
-.Timer,
 .Footer,
-.TasksList {
+main {
   margin: 0 auto;
   padding: 12px 0;
   max-width: 680px;
@@ -373,9 +373,8 @@ input::placeholder {
 
 @media screen and (max-width: 720.99px) {
   .Header,
-  .Timer,
   .Footer,
-  .TasksList {
+  main {
     padding: 6px 12px;
     max-width: 100%;
   }
