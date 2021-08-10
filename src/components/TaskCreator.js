@@ -22,18 +22,23 @@ class TaskCreator extends React.Component {
     } = this.props;
 
     return (
-      <div className="TaskCreator">
-        <h2>{isEdit ? 'Edit Your task' : 'Add new task'}</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label className="f-width">
+      <>
+        <h2 className="title title--color-tan">
+          {isEdit ? 'Edit Your task' : 'Add new task'}
+        </h2>
+        <form
+          className="card card--grid card--col-3"
+          onSubmit={this.handleSubmit}
+        >
+          <label>
             Task
             <input
               value={titleTemp}
               onChange={onTitleChange}
               name="title"
               type="text"
-              minlength="3"
-              maxlength="120"
+              minLength="3"
+              maxLength="120"
               placeholder="Focus on... any task You want!"
               required={true}
             />
@@ -56,7 +61,7 @@ class TaskCreator extends React.Component {
             <Icons name={isEdit ? 'check' : 'add'} />
           </button>
         </form>
-      </div>
+      </>
     );
   }
 }

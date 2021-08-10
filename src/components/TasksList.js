@@ -79,7 +79,7 @@ class TasksList extends React.Component {
     const { edit, taskTemp, tasks } = this.state;
 
     return (
-      <div className="TasksList">
+      <div className="tasks-list">
         <TaskCreator
           isEdit={edit}
           titleTemp={taskTemp.title}

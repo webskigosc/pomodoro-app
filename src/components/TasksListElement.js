@@ -19,14 +19,14 @@ function TasksListElement({
   };
 
   return (
-    <div className={'TaskListElement ' + (isEditable ? 'editable' : '')}>
-      <form onSubmit={handleSubmit}>
+    <div className={'task ' + (isEditable ? 'task--editable' : '')}>
+      <form className="task__editor" onSubmit={handleSubmit}>
         <input
           value={isEditable ? taskTemp.title : title}
           onChange={onTitleChange}
           type="text"
-          minlength="3"
-          maxlength="120"
+          minLength="3"
+          maxLength="120"
           required={true}
           disabled={!isEdit}
         />
@@ -42,23 +42,22 @@ function TasksListElement({
           disabled={!isEdit}
         />
 
-        {isEditable && (
+        {isEditable ? (
           <button
             type="submit"
             className="btn btn--rounded btn--square--sm btn--green"
           >
             <Icons name="check" />
           </button>
+        ) : (
+          <span
+            onClick={onEdit}
+            className="btn btn--rounded btn--square--sm btn--tan"
+          >
+            <Icons name="edit" />
+          </span>
         )}
       </form>
-      {!isEditable && (
-        <button
-          onClick={onEdit}
-          className="btn btn--rounded btn--square--sm btn--tan"
-        >
-          <Icons name="edit" />
-        </button>
-      )}
 
       <button
         onClick={onDelete}

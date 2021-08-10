@@ -10,16 +10,18 @@ function TaskEditor({
   const isActive = isEditable || (isPaused && isEditable) ? true : false;
 
   return (
-    <div className={'TaskEditor ' + (!isActive ? 'inactive' : '')}>
-      <label className="f-width">
+    <div
+      className={'card card--grid card--col-3 ' + (!isActive ? 'inactive' : '')}
+    >
+      <label>
         Task
         <input
           type="text"
           value={title}
           onChange={onTitleChange}
           placeholder="Task"
-          minlength="3"
-          maxlength="120"
+          minLength="3"
+          maxLength="120"
           disabled={!isActive}
         />
       </label>

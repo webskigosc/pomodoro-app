@@ -2,7 +2,7 @@ import Icons from './Icons';
 
 function Controls({ isRunning, isPaused, onStart, onStop, onPause, onEdit }) {
   return (
-    <div className="Controls">
+    <div className="controls">
       <button
         onClick={onStart}
         className="btn btn--green btn--rounded btn--square--xl"

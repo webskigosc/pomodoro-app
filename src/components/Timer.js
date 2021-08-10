@@ -17,7 +17,7 @@ function Timer({
   const classInactive = !isRunning && !isPaused ? 'inactive' : '';
 
   return (
-    <div className={'Timer ' + classInactive}>
+    <div className={'card ' + classInactive}>
       <Clock
         title={title}
         isRunning={isRunning}

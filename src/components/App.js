@@ -18,11 +18,11 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <>
       <Header title={app.title} description={app.description} />
       <Mainpage />
       <Footer stage={app.stage} course={app.course} />
-    </div>
+    </>
   );
 }
 
@@ -30,7 +30,7 @@ export default App;
 
 function Mainpage() {
   return (
-    <main>
+    <main className="wrapper">
       <TaskTimer />
       <TasksList />
     </main>

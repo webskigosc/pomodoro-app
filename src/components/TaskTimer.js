@@ -104,7 +104,7 @@ class TaskTimer extends React.Component {
     const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
 
     return (
-      <div className="TaskTimer">
+      <div className="task-timer">
         <Timer
           title={title}
           totalTimeInSeconds={totalTimeInSeconds}

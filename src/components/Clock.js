@@ -21,9 +21,9 @@ function Clock({
   };
 
   return (
-    <div className="Clock">
+    <div className="clock">
       <h2>{title}</h2>
-      <div className="Clock__progress">
+      <div className="progress">
         <svg className="progress__bg" viewBox="0 0 42 42">
           <circle cx="21" cy="21" r="20" fill="none" strokeWidth="2" />
         </svg>
@@ -44,7 +44,7 @@ function Clock({
             }}
           />
         </svg>
-        <div className="progress__state">
+        <div className="state">
           <span className="state__time">
             {convertNumber(minutesLeft)}:{convertNumber(secondsLeft)}
           </span>
