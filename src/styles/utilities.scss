@@ -1,0 +1,22 @@
+.inactive {
+  opacity: 0.2;
+  border: 1px solid $tan-color;
+  box-shadow: none;
+
+  .btn {
+    border-width: 1px;
+    color: lighten($tan-color, 20%);
+    border-color: lighten($tan-color, 20%);
+    font-weight: 300;
+  }
+
+  .clock {
+    color: $tan-color;
+  }
+}
+
+@keyframes progress-circle-stroke {
+  to {
+    stroke-dashoffset: 126;
+  }
+}

@@ -1,0 +1,310 @@
+.wrapper {
+  margin: 0 auto;
+  padding: 12px 0;
+  max-width: 680px;
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+  &--center {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.logotype {
+  margin-left: 12px;
+
+  &__title {
+    font-size: $text-2xl;
+    color: $red-color;
+  }
+
+  &__description {
+    display: block;
+    text-align: center;
+    font-size: $text-sm;
+    color: $green-color;
+  }
+}
+
+.card {
+  border-radius: 12px;
+  border: 1px solid white;
+  background-color: lighten($beige-color, 2%);
+  box-shadow: $shadow-sm;
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 24px;
+
+  &--grid {
+    display: grid;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &--col-3 {
+    grid-template-columns: auto 100px 70px;
+  }
+}
+
+.task {
+  @extend .card;
+
+  display: grid;
+  margin-bottom: 12px;
+  padding: 6px 24px;
+  grid-template-columns: auto 44px;
+  transition: background-color 300ms linear;
+
+  &__editor {
+    display: grid;
+    grid-template-columns: auto 80px 44px;
+    gap: 24px;
+
+    input {
+      border-color: transparent;
+    }
+  }
+
+  &:hover {
+    background-color: white;
+  }
+
+  &--editable {
+    background-color: white;
+
+    input {
+      border-color: $green-color;
+    }
+  }
+}
+
+h1,
+h2,
+h3 {
+  &.title {
+    text-align: center;
+    margin-bottom: 12px;
+
+    &--color-tan {
+      color: $tan-color;
+    }
+  }
+}
+
+.clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.progress {
+  position: relative;
+  height: 220px;
+  width: 220px;
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 220px;
+    width: 220px;
+    fill: none;
+    stroke: currentColor;
+  }
+
+  &__bg {
+    color: $red-color;
+  }
+
+  &__circle {
+    color: $green-color;
+    transform: rotate(-90deg);
+
+    &--animate > circle {
+      /* animation-name: progress-circle-stroke; */
+      stroke-dasharray: 126;
+      stroke-dashoffset: 0;
+      animation-timing-function: linear;
+      animation-fill-mode: forwards;
+      animation-play-state: paused;
+    }
+  }
+}
+
+.state {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__time {
+    font-size: $text-3xl;
+  }
+
+  &__counter {
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  color: $tan-color;
+
+  input {
+    margin-top: 6px;
+  }
+}
+
+input {
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid $tan-color;
+  padding: 6px 12px;
+  font-size: 22px;
+  font-weight: 300;
+  color: $brown-color;
+  transition: background-color 300ms linear;
+
+  &[type='number'] {
+    padding-right: 6px;
+  }
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
+    background-color: white;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+}
+
+.btn {
+  display: inline-block;
+  background: transparent;
+  border-style: solid;
+  border-width: 2px;
+  padding: 6px;
+  transition: opacity 300ms ease-in-out;
+  margin: 6px;
+
+  &:not(:disabled):hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }
+
+  &:disabled {
+    border-width: 1px;
+    color: lighten($tan-color, 20%);
+    border-color: lighten($tan-color, 20%);
+    font-weight: 300;
+  }
+
+  svg {
+    fill: currentColor;
+  }
+
+  &--rounded {
+    border-radius: 50%;
+  }
+
+  &--square--sm {
+    height: 32px;
+    width: 32px;
+    padding: 6px;
+    font-size: 16px;
+  }
+
+  &--square--md {
+    height: 48px;
+    width: 48px;
+    padding: 10px;
+    font-size: 18px;
+  }
+  &--square--xl {
+    height: 64px;
+    width: 64px;
+    padding: 12px;
+    font-size: 22px;
+  }
+
+  &--green {
+    color: $green-color;
+    border-color: $green-color;
+  }
+  &--red {
+    color: $red-color;
+    border-color: $red-color;
+  }
+  &--brown {
+    color: $brown-color;
+    border-color: $brown-color;
+  }
+  &--tan {
+    color: $tan-color;
+    border-color: $tan-color;
+  }
+}
+
+.description {
+  font-size: $text-sm;
+  color: $tan-color;
+  font-weight: 300;
+  text-align: center;
+
+  &__link {
+    text-decoration: none;
+    color: $brown-color;
+    transition: color 300ms ease-in-out;
+
+    &:hover {
+      color: $tan-color;
+    }
+  }
+}
+
+@media screen and (max-width: 720.99px) {
+  .wrapper {
+    padding: 6px 12px;
+    max-width: 100%;
+  }
+
+  .card {
+    &--grid {
+      grid-template-columns: auto 80px;
+
+      .btn {
+        justify-self: center;
+        grid-row-start: 2;
+        grid-column-start: 1;
+        grid-column-end: 3;
+      }
+    }
+  }
+
+  .task {
+    &__editor {
+      grid-template-columns: auto 80px;
+      gap: 0;
+
+      .btn {
+        justify-self: end;
+        grid-row-start: 2;
+        grid-column-start: 2;
+      }
+    }
+  }
+}
