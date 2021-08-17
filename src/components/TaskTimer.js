@@ -5,6 +5,7 @@ import TaskEditor from './TaskEditor';
 
 class TaskTimer extends React.Component {
   constructor(props) {
+    console.count('TaskTimer - constructor');
     super(props);
     this.state = {
       title: 'Learning React',
@@ -18,7 +19,18 @@ class TaskTimer extends React.Component {
     };
   }
 
+  componentDidMount() {
+    console.count('TaskTimer - componentDidMount');
+  }
+  componentDidUpdate() {
+    console.count('TaskTimer - componentDidUpdate');
+  }
+  componentWillUnmount() {
+    console.count('TaskTimer - componentWillUnmount');
+  }
+
   handleStart = () => {
+    console.count('TaskTimer - setState');
     this.setState({
       isRunning: true,
       isPaused: false,
@@ -29,6 +41,7 @@ class TaskTimer extends React.Component {
   };
 
   handleStop = () => {
+    console.count('TaskTimer - setState');
     this.setState({
       isRunning: false,
       isPaused: false,
@@ -41,6 +54,7 @@ class TaskTimer extends React.Component {
   };
 
   togglePause = () => {
+    console.count('TaskTimer - setState');
     this.setState((prevState) => {
       const isPaused = !prevState.isPaused;
       return {
@@ -75,20 +89,24 @@ class TaskTimer extends React.Component {
   }
 
   handleTitleChange = (event) => {
+    console.count('TaskTimer - setState');
     this.setState({ title: event.target.value });
   };
 
   handleTotalTimeInMinutesChange = (event) => {
+    console.count('TaskTimer - setState');
     this.setState({ totalTimeInMinutes: event.target.value });
   };
 
   handleEdit = () => {
+    console.count('TaskTimer - setState');
     this.setState({
       isEditable: true,
     });
   };
 
   render() {
+    console.count('TaskTimer - render');
     const {
       title,
       totalTimeInMinutes,
@@ -105,29 +123,32 @@ class TaskTimer extends React.Component {
 
     return (
       <div className="task-timer">
-        <Timer
-          title={title}
-          totalTimeInSeconds={totalTimeInSeconds}
-          timeLeftInSeconds={timeLeftInSeconds}
-          isRunning={isRunning}
-          isPaused={isPaused}
-          countBreaks={countBreaks}
-          countPauses={countPauses}
-          onStart={this.handleStart}
-          onStop={this.handleStop}
-          onPause={this.togglePause}
-          onEdit={this.handleEdit}
-        />
-        <TaskEditor
-          title={title}
-          totalTimeInMinutes={totalTimeInMinutes}
-          isRunning={isRunning}
-          isPaused={isPaused}
-          isEditable={isEditable}
-          onStart={this.handleStart}
-          onTitleChange={this.handleTitleChange}
-          onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
-        />
+        {!isEditable ? (
+          <Timer
+            title={title}
+            totalTimeInSeconds={totalTimeInSeconds}
+            timeLeftInSeconds={timeLeftInSeconds}
+            isRunning={isRunning}
+            isPaused={isPaused}
+            countBreaks={countBreaks}
+            countPauses={countPauses}
+            onStart={this.handleStart}
+            onStop={this.handleStop}
+            onPause={this.togglePause}
+            onEdit={this.handleEdit}
+          />
+        ) : (
+          <TaskEditor
+            title={title}
+            totalTimeInMinutes={totalTimeInMinutes}
+            isRunning={isRunning}
+            isPaused={isPaused}
+            isEditable={isEditable}
+            onStart={this.handleStart}
+            onTitleChange={this.handleTitleChange}
+            onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
+          />
+        )}
       </div>
     );
   }
