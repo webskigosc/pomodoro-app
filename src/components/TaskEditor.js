@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function TaskEditor({
   title,
   totalTimeInMinutes,
@@ -48,5 +50,34 @@ function TaskEditor({
     </div>
   );
 }
+
+const defaultEventType = (event) => console.log('Event type:', event.type);
+
+TaskEditor.defaultProps = {
+  title: '',
+  totalTimeInMinutes: 25,
+  onStart: defaultEventType,
+  onTitleChange: defaultEventType,
+  onTotalTimeInMinutesChange: defaultEventType,
+};
+
+function NonNegativeNonGreaterTimeType(props, propsName, componentName) {
+  if (props[propsName] < 1 || props[propsName] > 59) {
+    return new Error(
+      `Invalid props '${propsName} ' in component '${componentName}'. It has to be greater than 0 and less than 59`
+    );
+  }
+}
+
+TaskEditor.propTypes = {
+  title: PropTypes.string.isRequired,
+  // totalTimeInMinutes: PropTypes.number.isRequired,
+  totalTimeInMinutes: NonNegativeNonGreaterTimeType,
+  isPaused: PropTypes.bool.isRequired,
+  isEditable: PropTypes.bool.isRequired,
+  onStart: PropTypes.func.isRequired,
+  onTitleChange: PropTypes.func.isRequired,
+  onTotalTimeInMinutesChange: PropTypes.func.isRequired,
+};
 
 export default TaskEditor;

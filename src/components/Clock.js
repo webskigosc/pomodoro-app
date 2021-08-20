@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function Clock({
   title,
   isRunning,
@@ -55,5 +57,26 @@ function Clock({
     </div>
   );
 }
+
+Clock.defaultProps = {
+  title: '',
+  countBreaks: 0,
+  countPauses: 0,
+};
+
+const NumberOfStringType = PropTypes.oneOfType([
+  PropTypes.number,
+  PropTypes.string,
+]);
+
+Clock.propTypes = {
+  title: PropTypes.string.isRequired,
+  isRunning: PropTypes.bool.isRequired,
+  isPaused: PropTypes.bool.isRequired,
+  countBreaks: NumberOfStringType.isRequired,
+  countPauses: NumberOfStringType.isRequired,
+  timeLeftInSeconds: PropTypes.number.isRequired,
+  totalTimeInSeconds: PropTypes.number.isRequired,
+};
 
 export default Clock;

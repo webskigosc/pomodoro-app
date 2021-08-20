@@ -2,7 +2,7 @@ import React from 'react';
 
 import Timer from './Timer';
 import TaskEditor from './TaskEditor';
-import Error from './Error';
+import ErrorBoundary from './ErrorBoundary';
 
 class TaskTimer extends React.Component {
   constructor(props) {
@@ -125,7 +125,7 @@ class TaskTimer extends React.Component {
     return (
       <div className="task-timer">
         {!isEditable ? (
-          <Error message="Sorry. We have timer error.">
+          <ErrorBoundary message="Sorry. We have timer error.">
             <Timer
               title={title}
               totalTimeInSeconds={totalTimeInSeconds}
@@ -139,11 +139,12 @@ class TaskTimer extends React.Component {
               onPause={this.togglePause}
               onEdit={this.handleEdit}
             />
-          </Error>
+          </ErrorBoundary>
         ) : (
           <TaskEditor
             title={title}
-            totalTimeInMinutes={totalTimeInMinutes}
+            // totalTimeInMinutes={totalTimeInMinutes}
+            totalTimeInMinutes={null}
             isRunning={isRunning}
             isPaused={isPaused}
             isEditable={isEditable}
