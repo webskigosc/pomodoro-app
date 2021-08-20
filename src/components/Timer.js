@@ -16,6 +16,10 @@ function Timer({
 }) {
   const classInactive = !isRunning && !isPaused ? 'inactive' : '';
 
+  if (totalTimeInSeconds <= 0) {
+    throw new Error('Total time must be greater then zero.');
+  }
+
   return (
     <div className={'card ' + classInactive}>
       <Clock

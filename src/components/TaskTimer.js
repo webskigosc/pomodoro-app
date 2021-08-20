@@ -2,6 +2,7 @@ import React from 'react';
 
 import Timer from './Timer';
 import TaskEditor from './TaskEditor';
+import Error from './Error';
 
 class TaskTimer extends React.Component {
   constructor(props) {
@@ -124,19 +125,21 @@ class TaskTimer extends React.Component {
     return (
       <div className="task-timer">
         {!isEditable ? (
-          <Timer
-            title={title}
-            totalTimeInSeconds={totalTimeInSeconds}
-            timeLeftInSeconds={timeLeftInSeconds}
-            isRunning={isRunning}
-            isPaused={isPaused}
-            countBreaks={countBreaks}
-            countPauses={countPauses}
-            onStart={this.handleStart}
-            onStop={this.handleStop}
-            onPause={this.togglePause}
-            onEdit={this.handleEdit}
-          />
+          <Error message="Sorry. We have timer error.">
+            <Timer
+              title={title}
+              totalTimeInSeconds={totalTimeInSeconds}
+              timeLeftInSeconds={timeLeftInSeconds}
+              isRunning={isRunning}
+              isPaused={isPaused}
+              countBreaks={countBreaks}
+              countPauses={countPauses}
+              onStart={this.handleStart}
+              onStop={this.handleStop}
+              onPause={this.togglePause}
+              onEdit={this.handleEdit}
+            />
+          </Error>
         ) : (
           <TaskEditor
             title={title}
