@@ -14,7 +14,7 @@ function App() {
       title: 'Kurs Reacta',
       URL: 'https://kursreacta.pl',
     },
-    stage: 'W04L06',
+    stage: 'Week 5',
   };
 
   return (
