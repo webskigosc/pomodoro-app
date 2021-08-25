@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { getMinutesAndSecondsFromTimeInSeconds } from '../lib/time';
 
 function Clock({
   title,
@@ -9,8 +10,10 @@ function Clock({
   timeLeftInSeconds,
   totalTimeInSeconds,
 }) {
-  const secondsLeft = Math.floor(timeLeftInSeconds % 60);
-  const minutesLeft = Math.floor(timeLeftInSeconds / 60);
+  const [minutesLeft, secondsLeft] =
+    getMinutesAndSecondsFromTimeInSeconds(timeLeftInSeconds);
+  // const secondsLeft = Math.floor(timeLeftInSeconds % 60);
+  // const minutesLeft = Math.floor(timeLeftInSeconds / 60);
 
   const convertNumber = (value, maxValue = 59, maxLength = 2) => {
     if (value < 0) {
