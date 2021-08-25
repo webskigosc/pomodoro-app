@@ -143,8 +143,7 @@ class TaskTimer extends React.Component {
         ) : (
           <TaskEditor
             title={title}
-            // totalTimeInMinutes={totalTimeInMinutes}
-            totalTimeInMinutes={null}
+            totalTimeInMinutes={totalTimeInMinutes}
             isRunning={isRunning}
             isPaused={isPaused}
             isEditable={isEditable}
