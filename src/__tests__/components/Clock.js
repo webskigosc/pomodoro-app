@@ -12,13 +12,11 @@ describe('<Clock />', () => {
         root
       );
     });
-
     it('renders properly', () => {
       expect(root.childNodes[0].nodeName).toEqual('DIV');
       expect(root.childNodes[0].className).toMatch(/clock/);
       expect(root.childNodes[0].textContent).toMatch(/25:00/);
     });
-
     it('renders as div element', () => {
       expect(root.childNodes[0].nodeName).toEqual('DIV');
     });
@@ -27,6 +25,10 @@ describe('<Clock />', () => {
     });
     it('renders time properly', () => {
       expect(root.childNodes[0].textContent).toMatch(/25:00/);
+    });
+    it('renders progress status', () => {
+      expect(root.childNodes[0].childNodes[1].nodeName).toEqual('DIV');
+      expect(root.childNodes[0].childNodes[1].className).toMatch(/progress/);
     });
   });
 });
