@@ -63,6 +63,8 @@ function Clock({
 
 Clock.defaultProps = {
   title: '',
+  isRunning: false,
+  isPaused: false,
   countBreaks: 0,
   countPauses: 0,
 };
@@ -73,11 +75,11 @@ const NumberOfStringType = PropTypes.oneOfType([
 ]);
 
 Clock.propTypes = {
-  title: PropTypes.string.isRequired,
-  isRunning: PropTypes.bool.isRequired,
-  isPaused: PropTypes.bool.isRequired,
-  countBreaks: NumberOfStringType.isRequired,
-  countPauses: NumberOfStringType.isRequired,
+  title: PropTypes.string,
+  isRunning: PropTypes.bool,
+  isPaused: PropTypes.bool,
+  countBreaks: NumberOfStringType,
+  countPauses: NumberOfStringType,
   timeLeftInSeconds: PropTypes.number.isRequired,
   totalTimeInSeconds: PropTypes.number.isRequired,
 };
